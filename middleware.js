@@ -4,30 +4,42 @@ import { NextResponse } from 'next/server'
 export async function middleware(request) {
   const { pathname } = request.nextUrl
   
-  // Obține token-ul de autentificare
-  const token = await getToken({ 
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET 
-  })
-
-  // Rutele publice - nu necesită autentificare
-  const publicRoutes = ['/', '/login', '/inscriere', '/gdpr', '/termeni', '/curs']
-  const isPublicRoute = publicRoutes.some(route => 
-    pathname === route || pathname.startsWith('/curs/')
-  )
-  
-  // API-urile publice
-  const publicApiRoutes = ['/api/auth', '/api/public', '/api/health', '/api/inscrieri', '/api/contact']
-  const isPublicApi = publicApiRoutes.some(route => pathname.startsWith(route))
-
-  // Resurse statice
+  // Resurse statice - verifică PRIMUL
   const isStaticResource = pathname.startsWith('/_next') || 
                           pathname.startsWith('/favicon') ||
-                          pathname.includes('.') // fișiere cu extensie
+                          pathname.endsWith('.ico') ||
+                          pathname.endsWith('.png') ||
+                          pathname.endsWith('.jpg') ||
+                          pathname.endsWith('.svg') ||
+                          pathname.endsWith('.css') ||
+                          pathname.endsWith('.js')
 
-  // Permite accesul la rutele publice și resursele statice
-  if (isPublicRoute || isPublicApi || isStaticResource) {
+  if (isStaticResource) {
     return NextResponse.next()
+  }
+
+  // Rutele publice - nu necesită autentificare
+  const publicRoutes = ['/', '/login', '/inscriere', '/gdpr', '/termeni']
+  const isPublicRoute = publicRoutes.includes(pathname) || pathname.startsWith('/curs/')
+  
+  // API-urile publice
+  const publicApiRoutes = ['/api/auth', '/api/public', '/api/health', '/api/inscrieri', '/api/contact', '/api/cron']
+  const isPublicApi = publicApiRoutes.some(route => pathname.startsWith(route))
+
+  // Permite accesul la rutele publice
+  if (isPublicRoute || isPublicApi) {
+    return NextResponse.next()
+  }
+
+  // Obține token-ul de autentificare (doar pentru rutele protejate)
+  let token = null
+  try {
+    token = await getToken({ 
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET 
+    })
+  } catch (error) {
+    console.error('Middleware token error:', error)
   }
 
   // Verifică autentificarea pentru rutele protejate

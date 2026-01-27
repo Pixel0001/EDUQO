@@ -1,4 +1,3 @@
-import { getToken } from 'next-auth/jwt'
 import { NextResponse } from 'next/server'
 
 export async function middleware(request) {
@@ -31,50 +30,15 @@ export async function middleware(request) {
     return NextResponse.next()
   }
 
-  // Obține token-ul de autentificare (doar pentru rutele protejate)
-  let token = null
-  try {
-    token = await getToken({ 
-      req: request,
-      secret: process.env.NEXTAUTH_SECRET 
-    })
-  } catch (error) {
-    console.error('Middleware token error:', error)
-  }
+  // Verifică doar existența sesiunii (fără decodare JWT în Edge)
+  const sessionCookie =
+    request.cookies.get('__Secure-next-auth.session-token') ||
+    request.cookies.get('next-auth.session-token')
 
-  // Verifică autentificarea pentru rutele protejate
-  if (!token) {
+  if (!sessionCookie) {
     const loginUrl = new URL('/login', request.url)
     loginUrl.searchParams.set('callbackUrl', pathname)
     return NextResponse.redirect(loginUrl)
-  }
-
-  // Verifică accesul la admin
-  if (pathname.startsWith('/admin')) {
-    if (!['ADMIN', 'MANAGER'].includes(token.role)) {
-      return NextResponse.redirect(new URL('/', request.url))
-    }
-  }
-
-  // Verifică accesul la teacher
-  if (pathname.startsWith('/teacher')) {
-    if (!['ADMIN', 'MANAGER', 'TEACHER'].includes(token.role)) {
-      return NextResponse.redirect(new URL('/', request.url))
-    }
-  }
-
-  // Verifică accesul la API admin
-  if (pathname.startsWith('/api/admin')) {
-    if (!['ADMIN', 'MANAGER'].includes(token.role)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
-  }
-
-  // Verifică accesul la API teacher
-  if (pathname.startsWith('/api/teacher')) {
-    if (!['ADMIN', 'MANAGER', 'TEACHER'].includes(token.role)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
   }
 
   return NextResponse.next()

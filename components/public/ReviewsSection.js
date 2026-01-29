@@ -61,10 +61,117 @@ const Icons = {
   ),
 }
 
+// Culori pentru avatare
+const avatarColors = ['#4CD0DC', '#FCD700', '#0536FC', '#2BA84C', '#FC0168', '#1E1E42']
+
+// Funcție pentru a genera inițiale din nume
+const getInitials = (name) => {
+  if (!name) return '?'
+  const parts = name.trim().split(' ')
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase()
+  }
+  return name.slice(0, 2).toUpperCase()
+}
+
+// Recenzii implicite (afișate când nu sunt recenzii în baza de date)
+const defaultReviews = [
+  {
+    id: '1',
+    parentName: 'Maria Ionescu',
+    relation: 'Mamă',
+    childName: 'Andrei',
+    childAge: '6 ani',
+    rating: 5,
+    content: 'EDUQO a fost cea mai bună alegere pentru Andrei. În doar câteva luni, a învățat să citească și acum adoră cărțile! Atmosfera este caldă și prietenoasă.',
+  },
+  {
+    id: '2',
+    parentName: 'Alexandru Pop',
+    relation: 'Tată',
+    childName: 'Sofia',
+    childAge: '5 ani',
+    rating: 5,
+    content: 'Sofia abia așteaptă să meargă la cursurile de pictură. Profesorii știu cum să încurajeze creativitatea și să facă fiecare lecție specială.',
+  },
+  {
+    id: '3',
+    parentName: 'Elena Dumitrescu',
+    relation: 'Mamă',
+    childName: 'Matei',
+    childAge: '7 ani',
+    rating: 5,
+    content: 'De când a început cursul de limba engleză la EDUQO, Matei vorbește în engleză acasă și e foarte entuziasmat. Metoda lor de predare prin joc funcționează minunat!',
+  },
+  {
+    id: '4',
+    parentName: 'Cristian Marin',
+    relation: 'Tată',
+    childName: 'Ana',
+    childAge: '4 ani',
+    rating: 5,
+    content: 'Atelierele de creație sunt uimitoare! Ana vine acasă cu lucrări frumoase și povești despre ce a învățat. Profesorii sunt răbdători și foarte pricepuți.',
+  },
+]
+
 export default function ReviewsSection() {
   const [isVisible, setIsVisible] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
+  const [reviews, setReviews] = useState([])
+  const [loading, setLoading] = useState(true)
   const sectionRef = useRef(null)
+
+  // Încarcă recenziile din baza de date
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const res = await fetch('/api/public/reviews')
+        if (res.ok) {
+          const data = await res.json()
+          if (data && data.length > 0) {
+            // Adaugă culori și inițiale pentru fiecare recenzie
+            const reviewsWithColors = data.map((review, index) => ({
+              ...review,
+              color: avatarColors[index % avatarColors.length],
+              initials: getInitials(review.authorName),
+              // Compatibilitate cu structura componente
+              name: review.authorName,
+              role: review.roleLabel || 'Părinte',
+              text: review.message,
+              childInfo: review.childName ? (review.childName + (review.childAge ? `, ${review.childAge}` : '')) : '',
+            }))
+            setReviews(reviewsWithColors)
+          } else {
+            // Folosește recenziile implicite dacă nu există în baza de date
+            setReviews(defaultReviews.map((review, index) => ({
+              ...review,
+              color: avatarColors[index % avatarColors.length],
+              initials: getInitials(review.parentName),
+              name: review.parentName,
+              role: review.relation,
+              text: review.content,
+              childInfo: review.childName + (review.childAge ? `, ${review.childAge}` : ''),
+            })))
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching reviews:', error)
+        // Folosește recenziile implicite în caz de eroare
+        setReviews(defaultReviews.map((review, index) => ({
+          ...review,
+          color: avatarColors[index % avatarColors.length],
+          initials: getInitials(review.parentName),
+          name: review.parentName,
+          role: review.relation,
+          text: review.content,
+          childInfo: review.childName + (review.childAge ? `, ${review.childAge}` : ''),
+        })))
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchReviews()
+  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -84,54 +191,12 @@ export default function ReviewsSection() {
   }, [])
 
   useEffect(() => {
+    if (reviews.length === 0) return
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % reviews.length)
     }, 5000)
     return () => clearInterval(timer)
-  }, [])
-
-  const reviews = [
-    {
-      id: 1,
-      name: 'Maria Ionescu',
-      role: 'Mamă',
-      childName: 'Andrei, 6 ani',
-      rating: 5,
-      text: 'EDUQO a fost cea mai bună alegere pentru Andrei. În doar câteva luni, a învățat să citească și acum adoră cărțile! Atmosfera este caldă și prietenoasă.',
-      color: '#4CD0DC',
-      initials: 'MI',
-    },
-    {
-      id: 2,
-      name: 'Alexandru Pop',
-      role: 'Tată',
-      childName: 'Sofia, 5 ani',
-      rating: 5,
-      text: 'Sofia abia așteaptă să meargă la cursurile de pictură. Profesorii știu cum să încurajeze creativitatea și să facă fiecare lecție specială.',
-      color: '#FCD700',
-      initials: 'AP',
-    },
-    {
-      id: 3,
-      name: 'Elena Dumitrescu',
-      role: 'Mamă',
-      childName: 'Matei, 7 ani',
-      rating: 5,
-      text: 'De când a început cursul de limba engleză la EDUQO, Matei vorbește în engleză acasă și e foarte entuziasmat. Metoda lor de predare prin joc funcționează minunat!',
-      color: '#0536FC',
-      initials: 'ED',
-    },
-    {
-      id: 4,
-      name: 'Cristian Marin',
-      role: 'Tată',
-      childName: 'Ana, 4 ani',
-      rating: 5,
-      text: 'Atelierele de creație sunt uimitoare! Ana vine acasă cu lucrări frumoase și povești despre ce a învățat. Profesorii sunt răbdători și foarte pricepuți.',
-      color: '#2BA84C',
-      initials: 'CM',
-    },
-  ]
+  }, [reviews.length])
 
   const stats = [
     { 
@@ -323,6 +388,7 @@ export default function ReviewsSection() {
         </div>
 
         {/* Featured Review */}
+        {reviews.length > 0 && reviews[activeIndex] && (
         <div
           className={`mb-6 sm:mb-8 md:mb-12 transition-all duration-700 delay-200 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
@@ -383,7 +449,7 @@ export default function ReviewsSection() {
                       className="text-xs sm:text-sm text-[#64748B] font-medium"
                       style={{ fontFamily: 'var(--font-quicksand)' }}
                     >
-                      {reviews[activeIndex].role} • {reviews[activeIndex].childName}
+                      {reviews[activeIndex].role}{reviews[activeIndex].childInfo ? ` • ${reviews[activeIndex].childInfo}` : ''}
                     </p>
                   </div>
                 </div>
@@ -417,8 +483,10 @@ export default function ReviewsSection() {
             </div>
           </div>
         </div>
+        )}
 
         {/* Review Cards */}
+        {reviews.length > 0 && (
         <div
           className={`grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 transition-all duration-700 delay-300 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
@@ -478,8 +546,10 @@ export default function ReviewsSection() {
             </button>
           ))}
         </div>
+        )}
 
         {/* Navigation Dots */}
+        {reviews.length > 0 && (
         <div className="flex justify-center gap-1.5 sm:gap-2 mt-6 sm:mt-8 md:mt-10">
           {reviews.map((_, index) => (
             <button
@@ -494,8 +564,7 @@ export default function ReviewsSection() {
             />
           ))}
         </div>
-
-        {/* CTA Section */}
+        )}        {/* CTA Section */}
         <div
           className={`mt-8 sm:mt-12 md:mt-16 text-center transition-all duration-700 delay-400 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'

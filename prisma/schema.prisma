@@ -295,6 +295,8 @@ model Review {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   authorName String
   roleLabel  String?  // "Părinte", "Elev"
+  childName  String?  // Numele copilului
+  childAge   String?  // Vârsta copilului
   rating     Int      @default(5) // 1-5
   message    String
   avatarUrl  String?

@@ -109,11 +109,29 @@ export default function ContactSection() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setIsSubmitting(false)
-    setSubmitted(true)
-    setTimeout(() => setSubmitted(false), 3000)
-    setFormData({ name: '', email: '', phone: '', message: '' })
+    
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'A apărut o eroare')
+      }
+
+      setSubmitted(true)
+      setFormData({ name: '', email: '', phone: '', message: '' })
+      setTimeout(() => setSubmitted(false), 5000)
+    } catch (error) {
+      console.error('Eroare la trimiterea mesajului:', error)
+      alert(error.message || 'A apărut o eroare la trimiterea mesajului. Încercați din nou.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleChange = (e) => {

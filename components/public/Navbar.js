@@ -42,6 +42,7 @@ export default function Navbar() {
                 src="/logo eduquo.png"
                 alt="EDUQO Logo"
                 fill
+                sizes="(max-width: 640px) 40px, (max-width: 768px) 48px, 56px"
                 className="object-contain"
                 priority
               />

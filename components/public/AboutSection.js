@@ -260,6 +260,7 @@ export default function AboutSection() {
                     src="/logo eduquo.png"
                     alt="EDUQO"
                     fill
+                    sizes="(max-width: 640px) 64px, (max-width: 768px) 80px, 96px"
                     className="object-contain p-1 sm:p-2"
                   />
                 </div>

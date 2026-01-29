@@ -113,7 +113,7 @@ const themeScript = `
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ro" suppressHydrationWarning>
+    <html lang="ro" suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

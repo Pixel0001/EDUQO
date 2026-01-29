@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useMemo, useState, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 // Icon Components
 const Icons = {
@@ -99,6 +100,9 @@ export default function CoursesSection() {
   const [isVisible, setIsVisible] = useState(false)
   const [activeCategory, setActiveCategory] = useState('toate')
   const [hoveredCourse, setHoveredCourse] = useState(null)
+  const [courses, setCourses] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const sectionRef = useRef(null)
 
   useEffect(() => {
@@ -118,86 +122,146 @@ export default function CoursesSection() {
     return () => observer.disconnect()
   }, [])
 
-  const categories = [
-    { id: 'toate', name: 'Toate', icon: Icons.Grid },
-    { id: 'limba', name: 'Limbă', icon: Icons.Language },
-    { id: 'matematica', name: 'Matematică', icon: Icons.Calculator },
-    { id: 'arta', name: 'Artă', icon: Icons.Palette },
-    { id: 'pregatire', name: 'Pregătire', icon: Icons.Backpack },
-  ]
+  useEffect(() => {
+    let isMounted = true
 
-  const courses = [
-    {
-      id: 1,
-      title: 'Alfabetizare',
-      category: 'limba',
-      description: 'Descoperă literele și cuvintele într-un mod interactiv și distractiv',
-      icon: Icons.BookOpen,
-      color: '#4CD0DC',
-      features: ['Recunoașterea literelor', 'Scriere de mână', 'Citire timpurie'],
-      age: '4-7 ani',
-      duration: '45 min',
-    },
-    {
-      id: 2,
-      title: 'Limba Engleză',
-      category: 'limba',
-      description: 'Învățăm engleza prin cântece, jocuri și conversații vesele',
-      icon: Icons.Globe,
-      color: '#0536FC',
-      features: ['Vocabular de bază', 'Pronunție', 'Conversație'],
-      age: '5-12 ani',
-      duration: '50 min',
-    },
-    {
-      id: 3,
-      title: 'Matematică distractivă',
-      category: 'matematica',
-      description: 'Numerele și calculele devin aventuri captivante',
-      icon: Icons.Puzzle,
-      color: '#2BA84C',
-      features: ['Numere și numărare', 'Operații simple', 'Gândire logică'],
-      age: '5-10 ani',
-      duration: '45 min',
-    },
-    {
-      id: 4,
-      title: 'Pictură și desen',
-      category: 'arta',
-      description: 'Exprimă-te prin culori, forme și imaginație nelimitată',
-      icon: Icons.PaintBrush,
-      color: '#FCD700',
-      features: ['Tehnici de pictură', 'Desen creativ', 'Expresie artistică'],
-      age: '4-12 ani',
-      duration: '60 min',
-    },
-    {
-      id: 5,
-      title: 'Ateliere de creație',
-      category: 'arta',
-      description: 'Creăm și construim cu diverse materiale și tehnici',
-      icon: Icons.Scissors,
-      color: '#FC0168',
-      features: ['Lucru manual', 'Colaje', 'Sculptură ușoară'],
-      age: '4-10 ani',
-      duration: '60 min',
-    },
-    {
-      id: 6,
-      title: 'Pregătire pentru școală',
-      category: 'pregatire',
-      description: 'Tot ce are nevoie micuțul tău pentru un start de succes',
-      icon: Icons.Academic,
-      color: '#0536FC',
-      features: ['Abilități de bază', 'Disciplină pozitivă', 'Socializare'],
-      age: '5-7 ani',
-      duration: '90 min',
-    },
-  ]
+    const fetchCourses = async () => {
+      try {
+        setLoading(true)
+        setError('')
+        const res = await fetch('/api/public/courses')
+        if (!res.ok) {
+          throw new Error('Failed to fetch courses')
+        }
+        const data = await res.json()
+        if (isMounted) {
+          setCourses(Array.isArray(data) ? data : [])
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError('Nu am putut încărca cursurile')
+          setCourses([])
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false)
+        }
+      }
+    }
 
-  const filteredCourses = activeCategory === 'toate' 
-    ? courses 
-    : courses.filter(course => course.category === activeCategory)
+    fetchCourses()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const categoryMeta = {
+    limba: { name: 'Limbă', icon: Icons.Language, color: '#4CD0DC' },
+    matematica: { name: 'Matematică', icon: Icons.Calculator, color: '#2BA84C' },
+    arta: { name: 'Artă', icon: Icons.Palette, color: '#FC0168' },
+    pregatire: { name: 'Pregătire', icon: Icons.Backpack, color: '#0536FC' },
+    default: { name: 'Curs', icon: Icons.BookOpen, color: '#4CD0DC' },
+  }
+
+  const fallbackColors = ['#4CD0DC', '#0536FC', '#2BA84C', '#FCD700', '#FC0168']
+
+  const formatAge = (ageMin, ageMax) => {
+    if (ageMin && ageMax) return `${ageMin}-${ageMax} ani`
+    if (ageMin) return `${ageMin}+ ani`
+    if (ageMax) return `≤ ${ageMax} ani`
+    return 'Vârstă flexibilă'
+  }
+
+  const formatPrice = (price) => {
+    if (price == null) return null
+    try {
+      return new Intl.NumberFormat('ro-RO', { maximumFractionDigits: 0 }).format(price)
+    } catch {
+      return `${price}`
+    }
+  }
+
+  const normalizeCategory = (category) => {
+    if (!category) return 'default'
+    const normalized = String(category)
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+
+    const cleaned = normalized
+      .replace(/\s+/g, '')
+      .replace(/[^a-z0-9]+/g, '')
+
+    if (cleaned.includes('limba')) return 'limba'
+    if (cleaned.includes('matemat')) return 'matematica'
+    if (cleaned.includes('arta') || cleaned.includes('pict') || cleaned.includes('desen')) return 'arta'
+    if (cleaned.includes('pregat')) return 'pregatire'
+
+    return cleaned || 'default'
+  }
+
+  const getCategoryName = (categoryKey, rawCategory) => {
+    if (categoryMeta[categoryKey]) return categoryMeta[categoryKey].name
+    if (rawCategory) {
+      return rawCategory.charAt(0).toUpperCase() + rawCategory.slice(1)
+    }
+    return categoryMeta.default.name
+  }
+
+  const normalizedCourses = useMemo(() => (
+    courses.map((course, index) => {
+      const categoryKey = normalizeCategory(course.category)
+      const meta = categoryMeta[categoryKey] || categoryMeta.default
+      const rawFeatures = [
+        course.level ? `Nivel: ${course.level}` : null,
+        course.lessonsCount ? `${course.lessonsCount} lecții` : null,
+      ].filter(Boolean).slice(0, 2)
+      const features = rawFeatures.length
+        ? rawFeatures
+        : ['Învățare practică', 'Activități interactive']
+
+      return {
+        id: course.id,
+        slug: course.slug,
+        title: course.title,
+        category: categoryKey,
+        categoryLabel: getCategoryName(categoryKey, course.category),
+        description: course.descriptionShort || course.descriptionLong || 'Curs interactiv și captivant',
+        icon: meta.icon,
+        color: meta.color || fallbackColors[index % fallbackColors.length],
+        features,
+        age: formatAge(course.ageMin, course.ageMax),
+        duration: course.duration || (course.lessonsCount ? `${course.lessonsCount} lecții` : 'Program flexibil'),
+        image: course.mainImageUrl || course.imageUrl || null,
+        price: course.price,
+        discountPrice: course.discountPrice,
+      }
+    })
+  ), [courses])
+
+  const categories = useMemo(() => {
+    const uniqueCategories = new Map()
+    normalizedCourses.forEach((course) => {
+      if (!uniqueCategories.has(course.category)) {
+        uniqueCategories.set(course.category, {
+          id: course.category,
+          name: course.categoryLabel,
+          icon: (categoryMeta[course.category] || categoryMeta.default).icon,
+        })
+      }
+    })
+
+    return [
+      { id: 'toate', name: 'Toate', icon: Icons.Grid },
+      ...Array.from(uniqueCategories.values()),
+    ]
+  }, [normalizedCourses])
+
+  const filteredCourses = activeCategory === 'toate'
+    ? normalizedCourses
+    : normalizedCourses.filter(course => course.category === activeCategory)
 
   return (
     <section
@@ -278,9 +342,50 @@ export default function CoursesSection() {
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          {filteredCourses.map((course, index) => {
+          {loading && (
+            Array.from({ length: 6 }).map((_, index) => (
+              <div
+                key={`skeleton-${index}`}
+                className="relative bg-white rounded-3xl shadow-[0_4px_20px_rgba(30,30,66,0.06)] overflow-hidden animate-pulse"
+              >
+                {/* Image skeleton */}
+                <div className="h-48 bg-[#E2E8F0]" />
+                <div className="p-5 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-20 h-4 rounded bg-[#E2E8F0]" />
+                    <div className="w-16 h-4 rounded bg-[#E2E8F0]" />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-5 w-3/4 bg-[#E2E8F0] rounded" />
+                    <div className="h-3 w-full bg-[#E2E8F0] rounded" />
+                    <div className="h-3 w-2/3 bg-[#E2E8F0] rounded" />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-3 w-5/6 bg-[#E2E8F0] rounded" />
+                    <div className="h-3 w-2/3 bg-[#E2E8F0] rounded" />
+                  </div>
+                  <div className="h-10 w-full bg-[#E2E8F0] rounded-2xl" />
+                </div>
+              </div>
+            ))
+          )}
+
+          {!loading && error && (
+            <div className="sm:col-span-2 lg:col-span-3 bg-white rounded-3xl border border-[#E2E8F0] p-8 text-center text-[#64748B]">
+              {error}
+            </div>
+          )}
+
+          {!loading && !error && filteredCourses.length === 0 && (
+            <div className="sm:col-span-2 lg:col-span-3 bg-white rounded-3xl border border-[#E2E8F0] p-8 text-center text-[#64748B]">
+              Nu există cursuri disponibile momentan.
+            </div>
+          )}
+
+          {!loading && !error && filteredCourses.map((course, index) => {
             const IconComponent = course.icon
             const isHovered = hoveredCourse === course.id
+            const hasDiscount = course.discountPrice && course.price && course.discountPrice < course.price
             return (
               <div
                 key={course.id}
@@ -291,72 +396,107 @@ export default function CoursesSection() {
                   transitionDelay: `${index * 50}ms`
                 }}
               >
-                {/* Gradient overlay on hover */}
-                <div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{
-                    background: `linear-gradient(135deg, ${course.color}08 0%, transparent 60%)`
-                  }}
-                />
+                {/* Course Image */}
+                <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#F8FAFC] to-white">
+                  {course.image ? (
+                    <Image
+                      src={course.image}
+                      alt={course.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div 
+                        className="w-20 h-20 rounded-2xl flex items-center justify-center"
+                        style={{ backgroundColor: `${course.color}15` }}
+                      >
+                        <IconComponent className="w-10 h-10" style={{ color: course.color }} />
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Category badge on image */}
+                  <div className="absolute top-3 left-3">
+                    <span 
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm"
+                      style={{ 
+                        backgroundColor: `${course.color}ee`,
+                        color: 'white'
+                      }}
+                    >
+                      <IconComponent className="w-3.5 h-3.5" />
+                      {course.categoryLabel}
+                    </span>
+                  </div>
 
-                {/* Top accent line */}
-                <div className="relative h-1.5 overflow-hidden">
-                  <div 
-                    className="absolute inset-0 transition-transform duration-500 group-hover:scale-x-100 scale-x-0 origin-left"
-                    style={{ backgroundColor: course.color }}
-                  />
-                  <div 
-                    className="absolute inset-0"
-                    style={{ backgroundColor: `${course.color}40` }}
-                  />
+                  {/* Price badge on image */}
+                  {(course.price || course.discountPrice) && (
+                    <div className="absolute top-3 right-3">
+                      <div className="flex flex-col items-end gap-1">
+                        {hasDiscount && (
+                          <span className="text-xs font-medium text-white/80 line-through backdrop-blur-sm bg-black/30 px-2 py-0.5 rounded">
+                            {formatPrice(course.price)} MDL
+                          </span>
+                        )}
+                        <span 
+                          className="text-sm font-bold px-3 py-1.5 rounded-full shadow-lg"
+                          style={{ 
+                            backgroundColor: hasDiscount ? '#2BA84C' : '#1E1E42',
+                            color: 'white'
+                          }}
+                        >
+                          {formatPrice(hasDiscount ? course.discountPrice : course.price)} MDL
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Discount percentage */}
+                  {hasDiscount && (
+                    <div className="absolute bottom-3 left-3">
+                      <span className="bg-[#FC0168] text-white text-xs font-bold px-2 py-1 rounded-lg">
+                        -{Math.round((1 - course.discountPrice / course.price) * 100)}%
+                      </span>
+                    </div>
+                  )}
                 </div>
 
-                <div className="relative p-6">
-                  {/* Header */}
-                  <div className="flex items-start justify-between mb-5">
-                    <div 
-                      className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-3"
-                      style={{ backgroundColor: `${course.color}12` }}
+                <div className="relative p-5">
+                  {/* Header with age and duration */}
+                  <div className="flex items-center justify-between mb-3">
+                    <span 
+                      className="inline-flex items-center gap-1.5 text-xs text-[#64748B]"
+                      style={{ fontFamily: 'var(--font-quicksand)' }}
                     >
-                      <IconComponent className="w-7 h-7" style={{ color: course.color }} />
-                    </div>
-                    <div className="flex flex-col items-end gap-2">
-                      <span 
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-300"
-                        style={{ 
-                          backgroundColor: `${course.color}12`,
-                          color: course.color
-                        }}
-                      >
-                        <Icons.Users className="w-3.5 h-3.5" />
-                        {course.age}
-                      </span>
-                      <span 
-                        className="inline-flex items-center gap-1 text-xs text-[#94A3B8]"
-                        style={{ fontFamily: 'var(--font-quicksand)' }}
-                      >
-                        <Icons.Clock className="w-3.5 h-3.5" />
-                        {course.duration}
-                      </span>
-                    </div>
+                      <Icons.Users className="w-3.5 h-3.5" style={{ color: course.color }} />
+                      {course.age}
+                    </span>
+                    <span 
+                      className="inline-flex items-center gap-1 text-xs text-[#64748B]"
+                      style={{ fontFamily: 'var(--font-quicksand)' }}
+                    >
+                      <Icons.Clock className="w-3.5 h-3.5" style={{ color: course.color }} />
+                      {course.duration}
+                    </span>
                   </div>
 
                   {/* Title & Description */}
                   <h3 
-                    className="text-xl font-bold text-[#1E1E42] mb-2 group-hover:text-[#1E1E42] transition-colors"
+                    className="text-lg font-bold text-[#1E1E42] mb-2 group-hover:text-[#1E1E42] transition-colors line-clamp-1"
                     style={{ fontFamily: 'var(--font-poppins)' }}
                   >
                     {course.title}
                   </h3>
                   <p 
-                    className="text-[#64748B] text-sm mb-5 line-clamp-2 leading-relaxed"
+                    className="text-[#64748B] text-sm mb-4 line-clamp-2 leading-relaxed"
                     style={{ fontFamily: 'var(--font-quicksand)' }}
                   >
                     {course.description}
                   </p>
 
                   {/* Features */}
-                  <div className="space-y-2.5 mb-6">
+                  <div className="space-y-2 mb-4">
                     {course.features.map((feature, idx) => (
                       <div 
                         key={idx} 
@@ -382,22 +522,44 @@ export default function CoursesSection() {
                     ))}
                   </div>
 
-                  {/* CTA Button */}
-                  <Link
-                    href="/inscriere"
-                    className="relative flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl font-semibold overflow-hidden transition-all duration-300 group/btn"
-                    style={{ 
-                      backgroundColor: course.color === '#FCD700' ? '#1E1E42' : course.color,
-                      color: 'white',
-                      fontFamily: 'var(--font-poppins)'
-                    }}
-                  >
-                    <span className="relative z-10">Înscrie-te acum</span>
-                    <Icons.ArrowRight className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
-                    <div 
-                      className="absolute inset-0 bg-[#4CD0DC] translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"
-                    />
-                  </Link>
+                  {/* CTA Buttons */}
+                  <div className="flex gap-2">
+                    <Link
+                      href={course.slug ? `/curs/${course.slug}` : '/inscriere'}
+                      className="relative flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl font-semibold overflow-hidden transition-all duration-300 group/btn border-2"
+                      style={{ 
+                        borderColor: course.color === '#FCD700' ? '#1E1E42' : course.color,
+                        color: course.color === '#FCD700' ? '#1E1E42' : course.color,
+                        backgroundColor: 'transparent',
+                        fontFamily: 'var(--font-poppins)'
+                      }}
+                    >
+                      <span className="relative z-10 text-sm">Vezi detalii</span>
+                      <Icons.ArrowRight className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                      <div 
+                        className="absolute inset-0 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"
+                        style={{ backgroundColor: course.color === '#FCD700' ? '#1E1E42' : course.color }}
+                      />
+                      <style jsx>{`
+                        .group\\/btn:hover span, .group\\/btn:hover svg { color: white !important; }
+                      `}</style>
+                    </Link>
+                    <Link
+                      href="/inscriere"
+                      className="relative flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl font-semibold overflow-hidden transition-all duration-300 group/enroll"
+                      style={{ 
+                        backgroundColor: course.color === '#FCD700' ? '#1E1E42' : course.color,
+                        color: 'white',
+                        fontFamily: 'var(--font-poppins)'
+                      }}
+                    >
+                      <Icons.Sparkles className="relative z-10 w-4 h-4" />
+                      <span className="relative z-10 text-sm">Înscrie-te</span>
+                      <div 
+                        className="absolute inset-0 bg-[#2BA84C] translate-y-full group-hover/enroll:translate-y-0 transition-transform duration-300"
+                      />
+                    </Link>
+                  </div>
                 </div>
               </div>
             )

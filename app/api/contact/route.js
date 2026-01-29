@@ -41,7 +41,7 @@ export async function POST(request) {
         email,
         phone: phone || null,
         message,
-        status: 'NOU'
+        status: 'LEAD'
       }
     })
 

@@ -2,83 +2,84 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { requireAdmin } from '@/lib/session'
 
-// Map status between Enrollment and Inscriere models
-const statusToInscriere = {
-  'NEW': 'NOU',
-  'CONTACTED': 'CONTACTAT',
-  'CONFIRMED': 'CONFIRMAT',
-  'REJECTED': 'RESPINS'
-}
-
-export async function PUT(request, { params }) {
+// GET - Obține o înscriere
+export async function GET(request, { params }) {
   try {
     await requireAdmin()
+    
     const { id } = await params
-    const body = await request.json()
 
-    const { status, notes, source } = body
+    const inscriere = await prisma.inscriere.findUnique({
+      where: { id }
+    })
 
-    // Try to find in Enrollment first
-    let enrollment = await prisma.enrollment.findUnique({ where: { id } })
-    
-    if (enrollment) {
-      // Update Enrollment
-      enrollment = await prisma.enrollment.update({
-        where: { id },
-        data: { status, notes }
-      })
-      return NextResponse.json(enrollment)
+    if (!inscriere) {
+      return NextResponse.json(
+        { error: 'Înscriere negăsită' },
+        { status: 404 }
+      )
     }
 
-    // If not found, try Inscriere
-    let inscriere = await prisma.inscriere.findUnique({ where: { id } })
+    return NextResponse.json(inscriere)
+  } catch (error) {
+    console.error('Error fetching enrollment:', error)
+    return NextResponse.json(
+      { error: 'Eroare la încărcarea înscrierii' },
+      { status: 500 }
+    )
+  }
+}
+
+// PATCH - Actualizează o înscriere (status, notesList)
+export async function PATCH(request, { params }) {
+  try {
+    await requireAdmin()
     
-    if (inscriere) {
-      // Convert status to Inscriere format
-      const inscriereStatus = statusToInscriere[status] || 'NOU'
-      
-      inscriere = await prisma.inscriere.update({
-        where: { id },
-        data: { 
-          status: inscriereStatus, 
-          notes 
-        }
-      })
-      return NextResponse.json(inscriere)
+    const { id } = await params
+    const data = await request.json()
+
+    // Build update object
+    const updateData = {}
+    
+    if (data.status !== undefined) {
+      updateData.status = data.status
+    }
+    
+    if (data.notesList !== undefined) {
+      updateData.notesList = data.notesList
     }
 
-    return NextResponse.json({ error: 'Enrollment not found' }, { status: 404 })
+    const inscriere = await prisma.inscriere.update({
+      where: { id },
+      data: updateData
+    })
+
+    return NextResponse.json(inscriere)
   } catch (error) {
     console.error('Error updating enrollment:', error)
     if (error.message === 'Unauthorized' || error.message === 'Forbidden') {
       return NextResponse.json({ error: error.message }, { status: 401 })
     }
-    return NextResponse.json({ error: 'Failed to update enrollment' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Eroare la actualizarea înscrierii' },
+      { status: 500 }
+    )
   }
 }
 
+// DELETE - Șterge o înscriere
 export async function DELETE(request, { params }) {
   try {
     await requireAdmin()
     const { id } = await params
 
-    // Try to delete from Enrollment first
-    try {
-      await prisma.enrollment.delete({ where: { id } })
-      return NextResponse.json({ success: true })
-    } catch (e) {
-      // If not found in Enrollment, try Inscriere
-      try {
-        await prisma.inscriere.delete({ where: { id } })
-        return NextResponse.json({ success: true })
-      } catch (e2) {
-        return NextResponse.json({ error: 'Enrollment not found' }, { status: 404 })
-      }
-    }
+    await prisma.inscriere.delete({ where: { id } })
+    return NextResponse.json({ success: true })
   } catch (error) {
+    console.error('Error deleting enrollment:', error)
     if (error.message === 'Unauthorized' || error.message === 'Forbidden') {
       return NextResponse.json({ error: error.message }, { status: 401 })
     }
-    return NextResponse.json({ error: 'Failed to delete enrollment' }, { status: 500 })
+    return NextResponse.json({ error: 'Eroare la ștergerea înscrierii' }, { status: 500 })
   }
 }

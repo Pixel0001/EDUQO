@@ -12,7 +12,9 @@ import {
   ChatBubbleLeftIcon,
   TrashIcon,
   PlusIcon,
-  ClockIcon
+  ClockIcon,
+  AcademicCapIcon,
+  BookOpenIcon
 } from '@heroicons/react/24/outline'
 import toast from 'react-hot-toast'
 
@@ -32,10 +34,10 @@ const statusOptions = [
   { value: 'TEST', label: '🧪 Test', color: 'bg-cyan-100 text-cyan-800 border-cyan-400' },
 ]
 
-export default function ContactMessageDetailClient({ message: initialMessage }) {
+export default function EnrollmentDetailClient({ inscriere: initialInscriere }) {
   const router = useRouter()
-  const [message, setMessage] = useState(initialMessage)
-  const [notesList, setNotesList] = useState(initialMessage.notesList || [])
+  const [inscriere, setInscriere] = useState(initialInscriere)
+  const [notesList, setNotesList] = useState(initialInscriere.notesList || [])
   const [newNote, setNewNote] = useState('')
   const [saving, setSaving] = useState(false)
   const [deleting, setDeleting] = useState(false)
@@ -43,7 +45,7 @@ export default function ContactMessageDetailClient({ message: initialMessage }) 
   const updateStatus = async (newStatus) => {
     setSaving(true)
     try {
-      const res = await fetch(`/api/admin/contact/${message.id}`, {
+      const res = await fetch(`/api/admin/enrollments/${inscriere.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
@@ -51,7 +53,7 @@ export default function ContactMessageDetailClient({ message: initialMessage }) 
 
       if (!res.ok) throw new Error('Eroare la actualizare')
 
-      setMessage({ ...message, status: newStatus })
+      setInscriere({ ...inscriere, status: newStatus })
       toast.success('Status actualizat!')
     } catch (error) {
       toast.error('Eroare la actualizare')
@@ -74,7 +76,7 @@ export default function ContactMessageDetailClient({ message: initialMessage }) 
     ]
     
     try {
-      const res = await fetch(`/api/admin/contact/${message.id}`, {
+      const res = await fetch(`/api/admin/enrollments/${inscriere.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notesList: updatedNotes })
@@ -97,7 +99,7 @@ export default function ContactMessageDetailClient({ message: initialMessage }) 
     const updatedNotes = notesList.filter(n => n.id !== noteId)
     
     try {
-      const res = await fetch(`/api/admin/contact/${message.id}`, {
+      const res = await fetch(`/api/admin/enrollments/${inscriere.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notesList: updatedNotes })
@@ -114,19 +116,19 @@ export default function ContactMessageDetailClient({ message: initialMessage }) 
     }
   }
 
-  const deleteMessage = async () => {
-    if (!confirm('Sigur vrei să ștergi acest mesaj?')) return
+  const deleteInscriere = async () => {
+    if (!confirm('Sigur vrei să ștergi această înscriere?')) return
 
     setDeleting(true)
     try {
-      const res = await fetch(`/api/admin/contact/${message.id}`, {
+      const res = await fetch(`/api/admin/enrollments/${inscriere.id}`, {
         method: 'DELETE'
       })
 
       if (!res.ok) throw new Error('Eroare la ștergere')
 
-      toast.success('Mesaj șters!')
-      router.push('/admin/contact')
+      toast.success('Înscriere ștearsă!')
+      router.push('/admin/enrollments')
     } catch (error) {
       toast.error('Eroare la ștergere')
       setDeleting(false)
@@ -139,19 +141,19 @@ export default function ContactMessageDetailClient({ message: initialMessage }) 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link
-            href="/admin/contact"
+            href="/admin/enrollments"
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
             <ArrowLeftIcon className="h-5 w-5 text-gray-600" />
           </Link>
           <div>
-            <h1 className="text-xl xs:text-2xl font-bold text-gray-900">Mesaj de la {message.name}</h1>
-            <p className="text-sm text-gray-500">Primit pe {new Date(message.createdAt).toLocaleDateString('ro-RO')}</p>
+            <h1 className="text-xl xs:text-2xl font-bold text-gray-900">Înscriere - {inscriere.numeCopil}</h1>
+            <p className="text-sm text-gray-500">Primită pe {new Date(inscriere.createdAt).toLocaleDateString('ro-RO')}</p>
           </div>
         </div>
 
         <button
-          onClick={deleteMessage}
+          onClick={deleteInscriere}
           disabled={deleting}
           className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
         >
@@ -162,63 +164,98 @@ export default function ContactMessageDetailClient({ message: initialMessage }) 
       <div className="grid lg:grid-cols-3 gap-4 xs:gap-6">
         {/* Info principale */}
         <div className="lg:col-span-2 space-y-4">
+          {/* Info Elev */}
+          <div className="bg-white rounded-xl p-4 xs:p-6 border border-gray-200">
+            <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <AcademicCapIcon className="h-5 w-5 text-[#30919f]" />
+              Informații Elev
+            </h2>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm text-gray-500">Nume elev</p>
+                <p className="font-medium text-gray-900 text-lg">{inscriere.numeCopil}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Clasa</p>
+                <p className="font-medium text-gray-900">{inscriere.clasa}</p>
+              </div>
+              <div className="sm:col-span-2">
+                <p className="text-sm text-gray-500 mb-2">Cursuri dorite</p>
+                <div className="flex flex-wrap gap-2">
+                  {inscriere.cursuri?.map((curs, idx) => (
+                    <span key={idx} className="inline-flex items-center gap-1 bg-teal-50 text-teal-700 px-3 py-1.5 rounded-lg text-sm font-medium">
+                      <BookOpenIcon className="h-4 w-4" />
+                      {curs}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Contact info */}
           <div className="bg-white rounded-xl p-4 xs:p-6 border border-gray-200">
             <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <UserIcon className="h-5 w-5 text-[#30919f]" />
-              Informații Contact
+              Informații Părinte
             </h2>
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-500">Nume</p>
-                <p className="font-medium text-gray-900">{message.name}</p>
+                <p className="text-sm text-gray-500">Nume părinte</p>
+                <p className="font-medium text-gray-900">{inscriere.numeParinte}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Email</p>
-                <a href={`mailto:${message.email}`} className="font-medium text-[#30919f] hover:underline flex items-center gap-1">
-                  <EnvelopeIcon className="h-4 w-4" />
-                  {message.email}
+                <p className="text-sm text-gray-500">Telefon</p>
+                <a href={`tel:${inscriere.telefon}`} className="font-medium text-[#30919f] hover:underline flex items-center gap-1">
+                  <PhoneIcon className="h-4 w-4" />
+                  {inscriere.telefon}
                 </a>
               </div>
-              {message.phone && (
-                <div>
-                  <p className="text-sm text-gray-500">Telefon</p>
-                  <a href={`tel:${message.phone}`} className="font-medium text-[#30919f] hover:underline flex items-center gap-1">
-                    <PhoneIcon className="h-4 w-4" />
-                    {message.phone}
-                  </a>
-                </div>
-              )}
+              <div className="sm:col-span-2">
+                <p className="text-sm text-gray-500">Email</p>
+                <a href={`mailto:${inscriere.email}`} className="font-medium text-[#30919f] hover:underline flex items-center gap-1">
+                  <EnvelopeIcon className="h-4 w-4" />
+                  {inscriere.email}
+                </a>
+              </div>
             </div>
           </div>
 
           {/* Mesajul */}
-          <div className="bg-white rounded-xl p-4 xs:p-6 border border-gray-200">
-            <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <ChatBubbleLeftIcon className="h-5 w-5 text-[#30919f]" />
-              Mesaj
-            </h2>
-            <p className="text-gray-700 whitespace-pre-wrap">{message.message}</p>
-          </div>
+          {inscriere.mesaj && (
+            <div className="bg-white rounded-xl p-4 xs:p-6 border border-gray-200">
+              <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <ChatBubbleLeftIcon className="h-5 w-5 text-[#30919f]" />
+                Mesaj
+              </h2>
+              <p className="text-gray-700 whitespace-pre-wrap">{inscriere.mesaj}</p>
+            </div>
+          )}
 
           {/* Acțiuni rapide */}
           <div className="bg-white rounded-xl p-4 xs:p-6 border border-gray-200">
             <h2 className="font-semibold text-gray-900 mb-4">Acțiuni Rapide</h2>
             <div className="flex flex-wrap gap-3">
               <a 
-                href={`mailto:${message.email}?subject=Re: Mesajul tău pe Bravito After School`}
+                href={`mailto:${inscriere.email}?subject=Înscriere EDUQO - ${inscriere.numeCopil}`}
                 className="px-4 py-2 bg-[#30919f] text-white rounded-lg hover:bg-[#247a86] transition-colors"
               >
-                Răspunde prin Email
+                Trimite Email
               </a>
-              {message.phone && (
-                <a 
-                  href={`tel:${message.phone}`}
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                >
-                  Sună
-                </a>
-              )}
+              <a 
+                href={`tel:${inscriere.telefon}`}
+                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                Sună
+              </a>
+              <a 
+                href={`https://wa.me/${inscriere.telefon.replace(/\D/g, '')}?text=Bună ziua! Vă contactăm în legătură cu înscrierea pentru ${inscriere.numeCopil} la EDUQO.`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+              >
+                WhatsApp
+              </a>
             </div>
           </div>
         </div>
@@ -229,7 +266,7 @@ export default function ContactMessageDetailClient({ message: initialMessage }) 
           <div className="bg-white rounded-xl p-4 xs:p-6 border border-gray-200">
             <h2 className="font-semibold text-gray-900 mb-4">Status</h2>
             <select
-              value={message.status}
+              value={inscriere.status}
               onChange={(e) => updateStatus(e.target.value)}
               disabled={saving}
               className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#30919f] focus:border-transparent text-sm font-medium disabled:opacity-50"
@@ -241,9 +278,9 @@ export default function ContactMessageDetailClient({ message: initialMessage }) 
               ))}
             </select>
             <div className="mt-3">
-              {statusOptions.find(s => s.value === message.status) && (
-                <span className={`inline-block px-3 py-1.5 rounded-lg border-2 text-sm font-medium ${statusOptions.find(s => s.value === message.status)?.color}`}>
-                  {statusOptions.find(s => s.value === message.status)?.label}
+              {statusOptions.find(s => s.value === inscriere.status) && (
+                <span className={`inline-block px-3 py-1.5 rounded-lg border-2 text-sm font-medium ${statusOptions.find(s => s.value === inscriere.status)?.color}`}>
+                  {statusOptions.find(s => s.value === inscriere.status)?.label}
                 </span>
               )}
             </div>
@@ -305,10 +342,10 @@ export default function ContactMessageDetailClient({ message: initialMessage }) 
 
           {/* Data */}
           <div className="bg-white rounded-xl p-4 xs:p-6 border border-gray-200">
-            <h2 className="font-semibold text-gray-900 mb-2">Data primirii</h2>
+            <h2 className="font-semibold text-gray-900 mb-2">Data înscrierii</h2>
             <p className="text-gray-600 flex items-center gap-2">
               <CalendarIcon className="h-5 w-5" />
-              {new Date(message.createdAt).toLocaleDateString('ro-RO', {
+              {new Date(inscriere.createdAt).toLocaleDateString('ro-RO', {
                 weekday: 'long',
                 day: 'numeric',
                 month: 'long',

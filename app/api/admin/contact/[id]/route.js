@@ -40,6 +40,7 @@ export async function PATCH(request, { params }) {
     const updateData = {}
     if (data.status) updateData.status = data.status
     if (data.notes !== undefined) updateData.notes = data.notes
+    if (data.notesList !== undefined) updateData.notesList = data.notesList
 
     const message = await prisma.contactMessage.update({
       where: { id },

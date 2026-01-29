@@ -375,8 +375,9 @@ model Inscriere {
   clasa        String
   cursuri      String[]
   mesaj        String?
-  status       InscriereStatus @default(NOU)
+  status       InscriereStatus @default(LEAD)
   notes        String?
+  notesList    Json?           // Array de note cu timestamp
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
 
@@ -384,10 +385,22 @@ model Inscriere {
 }
 
 enum InscriereStatus {
-  NOU
-  CONTACTAT
-  CONFIRMAT
-  RESPINS
+  LEAD           // 🔵 Lead
+  FARA_RASPUNS   // 🔘 Fără Răspuns
+  CONTACTAT      // 🟡 Contactat
+  PROGRAMAT      // 🟠 Programat
+  PRIMA_LECTIE   // 🟢 Prima Lecție
+  FINALIZAT      // ⚫ Finalizat Lecția
+  SE_GANDESTE    // 🔘 Se Gândește
+  ASTEPTAM_PLATA // 💵 Așteptăm Plata
+  PLATIT         // 💰 Plătit
+  STUDIAZA       // 🟣 Studiază
+  PLECAT         // 🔴 Plecat
+  LOST_LEAD      // ❌ Lost Lead
+  TEST           // 🧪 Test
+  NOU            // Pentru compatibilitate
+  CONFIRMAT      // Pentru compatibilitate
+  RESPINS        // Pentru compatibilitate
 }
 
 // ==================== CONTACT MESSAGES ====================
@@ -398,8 +411,9 @@ model ContactMessage {
   email     String
   phone     String?
   message   String
-  status    ContactMessageStatus @default(NOU)
-  notes     String?
+  status    ContactMessageStatus @default(LEAD)
+  notes     String?              // Note simplu pentru compatibilitate
+  notesList Json?                // Array de note cu timestamp
   createdAt DateTime             @default(now())
   updatedAt DateTime             @updatedAt
 
@@ -407,10 +421,23 @@ model ContactMessage {
 }
 
 enum ContactMessageStatus {
-  NOU
-  CITIT
-  RASPUNS
-  ARHIVAT
+  LEAD           // 🔵 Lead
+  FARA_RASPUNS   // 🔘 Fără Răspuns
+  CONTACTAT      // 🟡 Contactat
+  PROGRAMAT      // 🟠 Programat
+  PRIMA_LECTIE   // 🟢 Prima Lecție
+  FINALIZAT      // ⚫ Finalizat Lecția
+  SE_GANDESTE    // 🔘 Se Gândește
+  ASTEPTAM_PLATA // 💵 Așteptăm Plata
+  PLATIT         // 💰 Plătit
+  STUDIAZA       // 🟣 Studiază
+  PLECAT         // 🔴 Plecat
+  LOST_LEAD      // ❌ Lost Lead
+  TEST           // 🧪 Test
+  NOU            // Pentru compatibilitate
+  CITIT          // Pentru compatibilitate
+  RASPUNS        // Pentru compatibilitate
+  ARHIVAT        // Pentru compatibilitate
 }
 
 // ==================== MISSED SESSIONS (LECȚII RATATE) ====================

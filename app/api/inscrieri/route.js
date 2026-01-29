@@ -43,7 +43,25 @@ export async function POST(request) {
       cursuriArray = []
     }
 
-    // Salvare în baza de date
+    // Obține denumirile cursurilor pentru notificare
+    let cursuriNume = []
+    if (cursuriArray.includes('selectam-impreuna')) {
+      cursuriNume = ['Selectăm împreună']
+    } else {
+      // Caută cursurile în baza de date pentru a obține denumirile
+      const cursuri = await prisma.course.findMany({
+        where: {
+          id: { in: cursuriArray }
+        },
+        select: { id: true, title: true }
+      })
+      cursuriNume = cursuriArray.map(id => {
+        const curs = cursuri.find(c => c.id === id)
+        return curs ? curs.title : id
+      })
+    }
+
+    // Salvare în baza de date (salvăm denumirile, nu ID-urile)
     const inscriere = await prisma.inscriere.create({
       data: {
         numeParinte,
@@ -51,7 +69,7 @@ export async function POST(request) {
         email,
         telefon,
         clasa,
-        cursuri: cursuriArray,
+        cursuri: cursuriNume,
         mesaj: mesaj || '',
         status: 'NOU'
       }
@@ -63,7 +81,7 @@ export async function POST(request) {
       numeParinte,
       telefon,
       email,
-      cursuriArray.join(', '),
+      cursuriNume.join(', '),
       mesaj
     )
 

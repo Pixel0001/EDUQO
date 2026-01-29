@@ -534,15 +534,20 @@ export default function CoursesSection() {
                         fontFamily: 'var(--font-poppins)'
                       }}
                     >
-                      <span className="relative z-10 text-sm">Vezi detalii</span>
-                      <Icons.ArrowRight className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                      <span
+                        className="relative z-10 text-sm transition-colors duration-300 group-hover/btn:text-white"
+                        style={{ transitionDelay: '120ms' }}
+                      >
+                        Vezi detalii
+                      </span>
+                      <Icons.ArrowRight
+                        className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1 group-hover/btn:text-white"
+                        style={{ transitionDelay: '120ms' }}
+                      />
                       <div 
                         className="absolute inset-0 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"
                         style={{ backgroundColor: course.color === '#FCD700' ? '#1E1E42' : course.color }}
                       />
-                      <style jsx>{`
-                        .group\\/btn:hover span, .group\\/btn:hover svg { color: white !important; }
-                      `}</style>
                     </Link>
                     <Link
                       href="/inscriere"

@@ -432,12 +432,20 @@ export default function ReviewsSection() {
               {/* Author */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div className="flex items-center gap-3 sm:gap-4">
-                  <div 
-                    className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center text-base sm:text-lg md:text-xl font-bold text-white shadow-lg flex-shrink-0"
-                    style={{ backgroundColor: reviews[activeIndex].color }}
-                  >
-                    {reviews[activeIndex].initials}
-                  </div>
+                  {reviews[activeIndex].avatarUrl ? (
+                    <img 
+                      src={reviews[activeIndex].avatarUrl}
+                      alt={reviews[activeIndex].name}
+                      className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl object-cover shadow-lg flex-shrink-0"
+                    />
+                  ) : (
+                    <div 
+                      className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center text-base sm:text-lg md:text-xl font-bold text-white shadow-lg flex-shrink-0"
+                      style={{ backgroundColor: reviews[activeIndex].color }}
+                    >
+                      {reviews[activeIndex].initials}
+                    </div>
+                  )}
                   <div className="min-w-0">
                     <p 
                       className="font-bold text-sm sm:text-base md:text-lg text-[#1E1E42]"
@@ -517,12 +525,20 @@ export default function ReviewsSection() {
               
               {/* Author */}
               <div className="flex items-center gap-2 sm:gap-3">
-                <div 
-                  className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center text-[10px] sm:text-xs md:text-sm font-bold text-white shadow-md group-hover:scale-110 transition-transform duration-300 flex-shrink-0"
-                  style={{ backgroundColor: review.color }}
-                >
-                  {review.initials}
-                </div>
+                {review.avatarUrl ? (
+                  <img 
+                    src={review.avatarUrl}
+                    alt={review.name}
+                    className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-lg sm:rounded-xl object-cover shadow-md group-hover:scale-110 transition-transform duration-300 flex-shrink-0"
+                  />
+                ) : (
+                  <div 
+                    className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-lg sm:rounded-xl flex items-center justify-center text-[10px] sm:text-xs md:text-sm font-bold text-white shadow-md group-hover:scale-110 transition-transform duration-300 flex-shrink-0"
+                    style={{ backgroundColor: review.color }}
+                  >
+                    {review.initials}
+                  </div>
+                )}
                 <div className="min-w-0">
                   <p 
                     className="font-bold text-[#1E1E42] text-[10px] sm:text-xs md:text-sm truncate"

@@ -20,13 +20,13 @@ export default function TeacherHeader({ user }) {
           {/* Mobile logo */}
           <Link href="/teacher" className="lg:hidden flex items-center gap-2">
             <Image
-              src="/bravito.png"
-              alt="Bravito"
+              src="/logo%20eduquo.png"
+              alt="EDUQO"
               width={32}
               height={32}
               className="object-contain rounded-full"
             />
-            <span className="font-bold text-gray-800">Bravito</span>
+            <span className="font-bold text-gray-800">EDUQO</span>
           </Link>
 
           {/* Desktop - Back button */}

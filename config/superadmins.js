@@ -12,7 +12,7 @@
 
 export const SUPER_ADMIN_EMAILS = [
   'racustefan34@gmail.com',
-  'stelli243@gmail.com',
+  'eduqo.afterschool@gmail.com',
 
   // Add more super admin emails here:
   // 'another.admin@example.com',

@@ -1,4 +1,4 @@
-# Bravito After School
+# EDUQO After School
 
 Platformă de management pentru cursuri after-school, dezvoltată cu Next.js 15, Prisma și MongoDB.
 
@@ -20,7 +20,7 @@ Platformă de management pentru cursuri after-school, dezvoltată cu Next.js 15,
 ```bash
 # Clonează repository-ul
 git clone <repo-url>
-cd bravitoafterschool
+cd eduqoafterschool
 
 # Instalează dependențele
 npm install
@@ -97,7 +97,7 @@ CMD ["node", "server.js"]
 git pull
 npm ci --production
 npm run build
-pm2 start npm --name "bravito" -- start
+pm2 start npm --name "eduqo" -- start
 ```
 
 ## 📝 Variabile de Mediu
@@ -156,4 +156,4 @@ Pentru întrebări sau probleme, contactează echipa de dezvoltare.
 
 ## 📄 Licență
 
-Proprietar - Bravito After School
+Proprietar - EDUQO After School

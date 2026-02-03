@@ -26,7 +26,7 @@ async function main() {
   const adminPassword = await bcrypt.hash('admin123', 10)
   const admin = await prisma.user.create({
     data: {
-      email: 'admin@bravito.ro',
+      email: 'admin@eduqo.ro',
       name: 'Administrator',
       password: adminPassword,
       role: 'ADMIN'
@@ -38,7 +38,7 @@ async function main() {
   const teacherPassword = await bcrypt.hash('teacher123', 10)
   const teacher = await prisma.user.create({
     data: {
-      email: 'profesor@bravito.ro',
+      email: 'profesor@eduqo.ro',
       name: 'Maria Ionescu',
       password: teacherPassword,
       role: 'TEACHER'
@@ -187,7 +187,7 @@ async function main() {
         authorName: 'Alexandra Stan',
         authorRole: 'Părinte',
         rating: 4,
-        message: 'Atmosferă prietenoasă și profesori dedicați. Recomand cu căldură Bravito After School!',
+        message: 'Atmosferă prietenoasă și profesori dedicați. Recomand cu căldură EDUQO After School!',
         published: true
       }
     ]
@@ -199,8 +199,8 @@ async function main() {
   console.log('✨ Seed completed successfully!')
   console.log('')
   console.log('📋 Login credentials:')
-  console.log('   Admin: admin@bravito.ro / admin123')
-  console.log('   Teacher: profesor@bravito.ro / teacher123')
+  console.log('   Admin: admin@eduqo.ro / admin123')
+  console.log('   Teacher: profesor@eduqo.ro / teacher123')
   console.log('')
 }
 

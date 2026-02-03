@@ -11,7 +11,7 @@ export default function GDPRPage() {
       icon: ShieldCheckIcon,
       content: (
         <p className="text-gray-600 leading-relaxed">
-          Centrul Bravito After School respectă dreptul la confidențialitate și se angajează să protejeze datele cu caracter personal ale copiilor și ale părinților/reprezentanților legali, în conformitate cu legislația în vigoare privind protecția datelor cu caracter personal (GDPR). Prezenta politică explică modul în care Bravito colectează, utilizează, stochează și protejează datele personale.
+          Centrul EDUQO After School respectă dreptul la confidențialitate și se angajează să protejeze datele cu caracter personal ale copiilor și ale părinților/reprezentanților legali, în conformitate cu legislația în vigoare privind protecția datelor cu caracter personal (GDPR). Prezenta politică explică modul în care EDUQO colectează, utilizează, stochează și protejează datele personale.
         </p>
       )
     },
@@ -89,7 +89,7 @@ export default function GDPRPage() {
           <ul className="space-y-2 text-gray-600">
             <li className="flex items-start gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#30919f] mt-2 flex-shrink-0"></span>
-              Înscrierea copilului la programele Bravito After School
+              Înscrierea copilului la programele EDUQO After School
             </li>
             <li className="flex items-start gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#30919f] mt-2 flex-shrink-0"></span>
@@ -109,7 +109,7 @@ export default function GDPRPage() {
             </li>
             <li className="flex items-start gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#30919f] mt-2 flex-shrink-0"></span>
-              Promovarea activităților Bravito (doar cu consimțământ)
+              Promovarea activităților EDUQO (doar cu consimțământ)
             </li>
           </ul>
         </div>
@@ -149,7 +149,7 @@ export default function GDPRPage() {
       icon: LockClosedIcon,
       content: (
         <div>
-          <p className="text-gray-600 mb-4">Bravito After School:</p>
+          <p className="text-gray-600 mb-4">EDUQO After School:</p>
           <ul className="space-y-2 text-gray-600">
             <li className="flex items-start gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#30919f] mt-2 flex-shrink-0"></span>
@@ -222,7 +222,7 @@ export default function GDPRPage() {
       icon: CameraIcon,
       content: (
         <p className="text-gray-600 leading-relaxed">
-          Fotografiile și materialele video realizate în cadrul activităților Bravito After School pot fi utilizate exclusiv în scop educativ sau de promovare, doar cu acordul scris al părinților/reprezentanților legali.
+          Fotografiile și materialele video realizate în cadrul activităților EDUQO After School pot fi utilizate exclusiv în scop educativ sau de promovare, doar cu acordul scris al părinților/reprezentanților legali.
         </p>
       )
     },
@@ -232,7 +232,7 @@ export default function GDPRPage() {
       icon: DocumentTextIcon,
       content: (
         <p className="text-gray-600 leading-relaxed">
-          Bravito After School își rezervă dreptul de a actualiza prezenta politică. Orice modificare va fi comunicată părinților.
+          EDUQO After School își rezervă dreptul de a actualiza prezenta politică. Orice modificare va fi comunicată părinților.
         </p>
       )
     }
@@ -304,22 +304,22 @@ export default function GDPRPage() {
                 Pentru orice întrebări sau solicitări legate de protecția datelor:
               </p>
               <div className="bg-white rounded-xl p-6 space-y-4">
-                <h3 className="font-bold text-gray-900 text-lg">Bravito After School</h3>
+                <h3 className="font-bold text-gray-900 text-lg">EDUQO After School</h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-gray-600">
                     <MapPinIcon className="w-5 h-5 text-[#30919f]" />
-                    <span>Str. M.V. Bănulescu Bodoni 57/1, of. 316A</span>
+                    <span>Durlești, str. Cartușa 83, et. 2</span>
                   </div>
                   <div className="flex items-center gap-3 text-gray-600">
                     <PhoneIcon className="w-5 h-5 text-[#30919f]" />
-                    <a href="tel:+37369352282" className="hover:text-[#30919f] transition-colors">
-                      +373 69 352 282
+                    <a href="tel:+37360179539" className="hover:text-[#30919f] transition-colors">
+                      +373 60 179 539
                     </a>
                   </div>
                   <div className="flex items-center gap-3 text-gray-600">
                     <EnvelopeIcon className="w-5 h-5 text-[#30919f]" />
-                    <a href="mailto:bravito.after.school@gmail.com" className="hover:text-[#30919f] transition-colors">
-                      bravito.after.school@gmail.com
+                    <a href="mailto:eduqo.afterschool@gmail.com" className="hover:text-[#30919f] transition-colors">
+                      eduqo.afterschool@gmail.com
                     </a>
                   </div>
                 </div>

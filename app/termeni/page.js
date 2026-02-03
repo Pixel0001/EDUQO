@@ -29,7 +29,7 @@ export default function TermsPage() {
       icon: DocumentTextIcon,
       content: (
         <p className="text-gray-600 leading-relaxed">
-          Prezentul document stabilește termenii și condițiile de participare la programele oferite de Centrul Bravito After School. Prin înscrierea copilului, părintele/reprezentantul legal confirmă că a citit, a înțeles și acceptă acești termeni.
+          Prezentul document stabilește termenii și condițiile de participare la programele oferite de Centrul EDUQO After School. Prin înscrierea copilului, părintele/reprezentantul legal confirmă că a citit, a înțeles și acceptă acești termeni.
         </p>
       )
     },
@@ -273,7 +273,7 @@ export default function TermsPage() {
             </div>
             <div>
               <h1 className="text-3xl md:text-4xl font-bold">Termeni și Condiții</h1>
-              <p className="text-gray-400 mt-1">Condițiile de participare la programele Bravito After School</p>
+              <p className="text-gray-400 mt-1">Condițiile de participare la programele EDUQO After School</p>
             </div>
           </div>
         </div>
@@ -319,22 +319,22 @@ export default function TermsPage() {
                 Pentru orice întrebări sau clarificări:
               </p>
               <div className="bg-white rounded-xl p-6 space-y-4">
-                <h3 className="font-bold text-gray-900 text-lg">Bravito After School</h3>
+                <h3 className="font-bold text-gray-900 text-lg">EDUQO After School</h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-gray-600">
                     <MapPinIcon className="w-5 h-5 text-[#f8b316]" />
-                    <span>Str. M.V. Bănulescu Bodoni 57/1, of. 316A</span>
+                    <span>Durlești, str. Cartușa 83, et. 2</span>
                   </div>
                   <div className="flex items-center gap-3 text-gray-600">
                     <PhoneIcon className="w-5 h-5 text-[#f8b316]" />
-                    <a href="tel:+37369352282" className="hover:text-[#f8b316] transition-colors">
-                      +373 69 352 282
+                    <a href="tel:+37360179539" className="hover:text-[#f8b316] transition-colors">
+                      +373 60 179 539
                     </a>
                   </div>
                   <div className="flex items-center gap-3 text-gray-600">
                     <EnvelopeIcon className="w-5 h-5 text-[#f8b316]" />
-                    <a href="mailto:bravito.after.school@gmail.com" className="hover:text-[#f8b316] transition-colors">
-                      bravito.after.school@gmail.com
+                    <a href="mailto:eduqo.afterschool@gmail.com" className="hover:text-[#f8b316] transition-colors">
+                      eduqo.afterschool@gmail.com
                     </a>
                   </div>
                 </div>

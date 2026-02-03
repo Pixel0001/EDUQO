@@ -863,13 +863,13 @@ export default function InscrieriPage() {
                 Nu ezita să ne contactezi pentru orice nelămuriri.
               </p>
               <div className="space-y-3">
-                <a href="tel:+37360000000" className="flex items-center gap-3 text-sm text-white/80 hover:text-[#4CD0DC] transition-colors">
+                <a href="tel:+37360179539" className="flex items-center gap-3 text-sm text-white/80 hover:text-[#4CD0DC] transition-colors">
                   <PhoneIcon className="w-5 h-5" />
-                  +373 60 000 000
+                  +373 60 179 539
                 </a>
-                <a href="mailto:contact@eduqo.md" className="flex items-center gap-3 text-sm text-white/80 hover:text-[#4CD0DC] transition-colors">
+                <a href="mailto:eduqo.afterschool@gmail.com" className="flex items-center gap-3 text-sm text-white/80 hover:text-[#4CD0DC] transition-colors">
                   <EnvelopeIcon className="w-5 h-5" />
-                  contact@eduqo.md
+                  eduqo.afterschool@gmail.com
                 </a>
               </div>
             </div>

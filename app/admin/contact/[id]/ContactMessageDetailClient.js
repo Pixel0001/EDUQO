@@ -206,7 +206,7 @@ export default function ContactMessageDetailClient({ message: initialMessage }) 
             <h2 className="font-semibold text-gray-900 mb-4">Acțiuni Rapide</h2>
             <div className="flex flex-wrap gap-3">
               <a 
-                href={`mailto:${message.email}?subject=Re: Mesajul tău pe Bravito After School`}
+                href={`mailto:${message.email}?subject=Re: Mesajul tău pe EDUQO After School`}
                 className="px-4 py-2 bg-[#30919f] text-white rounded-lg hover:bg-[#247a86] transition-colors"
               >
                 Răspunde prin Email

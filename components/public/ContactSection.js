@@ -142,9 +142,9 @@ export default function ContactSection() {
     {
       icon: Icons.Phone,
       title: 'Sună-ne',
-      value: '+373 60 123 456',
+      value: '+373 60 179 539',
       subtitle: 'Luni - Vineri: 9-19',
-      href: 'tel:+37360123456',
+      href: 'tel:+37360179539',
       bgColor: 'bg-[#2BA84C]/10',
       iconColor: 'text-[#2BA84C]',
       hoverBorder: 'hover:border-[#2BA84C]',
@@ -152,9 +152,9 @@ export default function ContactSection() {
     {
       icon: Icons.Email,
       title: 'Email',
-      value: 'contact@eduqo.md',
+      value: 'eduqo.afterschool@gmail.com',
       subtitle: 'Răspundem în 24h',
-      href: 'mailto:contact@eduqo.md',
+      href: 'mailto:eduqo.afterschool@gmail.com',
       bgColor: 'bg-[#0536FC]/10',
       iconColor: 'text-[#0536FC]',
       hoverBorder: 'hover:border-[#0536FC]',
@@ -162,9 +162,9 @@ export default function ContactSection() {
     {
       icon: Icons.MapPin,
       title: 'Vizitează-ne',
-      value: 'Chișinău, Centru',
-      subtitle: 'Str. Exemplu nr. 123',
-      href: '#',
+      value: 'Durlești',
+      subtitle: 'Str. Cartușa 83, et. 2',
+      href: 'https://maps.app.goo.gl/YourMapLink',
       bgColor: 'bg-[#FC0168]/10',
       iconColor: 'text-[#FC0168]',
       hoverBorder: 'hover:border-[#FC0168]',
@@ -182,10 +182,8 @@ export default function ContactSection() {
   ]
 
   const socialLinks = [
-    { name: 'Facebook', icon: Icons.Facebook, href: '#', bg: 'bg-[#1877F2]' },
-    { name: 'Instagram', icon: Icons.Instagram, href: '#', bg: 'bg-gradient-to-br from-[#833AB4] via-[#E4405F] to-[#FCAF45]' },
-    { name: 'YouTube', icon: Icons.YouTube, href: '#', bg: 'bg-[#FF0000]' },
-    { name: 'TikTok', icon: Icons.TikTok, href: '#', bg: 'bg-[#000000]' },
+    { name: 'Facebook', icon: Icons.Facebook, href: 'https://www.facebook.com/share/1FNwYERQTt/', bg: 'bg-[#1877F2]' },
+    { name: 'Instagram', icon: Icons.Instagram, href: 'https://www.instagram.com/eduqo_afterschool', bg: 'bg-gradient-to-br from-[#833AB4] via-[#E4405F] to-[#FCAF45]' },
   ]
 
   const features = [
@@ -406,37 +404,53 @@ export default function ContactSection() {
               </div>
             </div>
 
-            {/* Fun CTA */}
-            <div className="p-3 sm:p-4 md:p-5 bg-gradient-to-r from-[#4CD0DC]/10 to-[#4CD0DC]/5 rounded-xl sm:rounded-2xl border-2 border-[#4CD0DC]/30">
-              <div className="flex items-start gap-2 sm:gap-3">
+            {/* Google Map */}
+            <div className="rounded-xl sm:rounded-2xl overflow-hidden border-2 border-[#E2E8F0] shadow-md">
+              <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white border-b border-[#E2E8F0]">
                 <div className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 bg-[#4CD0DC]/20 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0">
                   <Icons.MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-[#4CD0DC]" />
                 </div>
                 <div className="min-w-0">
                   <p 
-                    className="text-sm sm:text-base text-[#1E1E42] font-bold mb-0.5 sm:mb-1"
+                    className="text-sm sm:text-base text-[#1E1E42] font-bold"
                     style={{ fontFamily: 'var(--font-poppins)' }}
                   >
-                    Vino să ne cunoști!
+                    Locația noastră
                   </p>
                   <p 
-                    className="text-[#64748B] text-xs sm:text-sm mb-2 sm:mb-3"
+                    className="text-[#64748B] text-xs sm:text-sm"
                     style={{ fontFamily: 'var(--font-quicksand)' }}
                   >
-                    Programează o vizită gratuită la sediul nostru
+                    Durlești, str. Cartușa 83, et. 2
                   </p>
-                  <a 
-                    href="#"
-                    className="inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm md:text-base text-[#4CD0DC] font-bold hover:text-[#3BB8C4] transition-colors"
-                    style={{ fontFamily: 'var(--font-poppins)' }}
-                  >
-                    Programează vizită
-                    <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                    </svg>
-                  </a>
                 </div>
               </div>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2719.8!2d28.7833!3d47.0167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDfCsDAxJzAwLjEiTiAyOMKwNDcnMDAuMCJF!5e0!3m2!1sro!2smd!4v1234567890"
+                width="100%"
+                height="200"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="w-full"
+              ></iframe>
+              <a 
+                href="https://maps.app.goo.gl/durlesti-cartusa-83"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 p-3 bg-[#4CD0DC]/10 hover:bg-[#4CD0DC]/20 transition-colors"
+              >
+                <span 
+                  className="text-xs sm:text-sm text-[#4CD0DC] font-bold"
+                  style={{ fontFamily: 'var(--font-poppins)' }}
+                >
+                  Deschide în Google Maps
+                </span>
+                <svg className="w-4 h-4 text-[#4CD0DC]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
             </div>
           </div>
 

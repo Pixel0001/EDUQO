@@ -1,14 +1,14 @@
-// Script pentru a crea favicon.ico din logo-ul Bravito
+// Script pentru a crea favicon.ico din logo-ul EDUQO
 const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 
 async function createFavicon() {
   const rootDir = path.join(__dirname, '..');
-  const inputPath = path.join(rootDir, 'public', 'bravito.png');
+  const inputPath = path.join(rootDir, 'public', 'eduqo.png');
   const outputIco = path.join(rootDir, 'public', 'favicon.ico');
   
-  console.log('🎨 Creez favicon.ico din bravito.png...');
+  console.log('🎨 Creez favicon.ico din eduqo.png...');
   
   try {
     // Creează multiple dimensiuni pentru ICO

@@ -279,7 +279,7 @@ export default function CourseDetailPage() {
         <div className="absolute top-40 left-10 w-72 h-72 bg-[#4CD0DC]/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-80 right-10 w-96 h-96 bg-[#FCD700]/5 rounded-full blur-3xl pointer-events-none" />
         
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 py-4 xs:py-6 sm:py-10">
           {/* Back button */}
           <Link 
             href="/#cursuri"
@@ -292,7 +292,7 @@ export default function CourseDetailPage() {
             <span className="font-medium">Înapoi la cursuri</span>
           </Link>
 
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-14">
+          <div className="grid lg:grid-cols-2 gap-5 xs:gap-6 sm:gap-8 lg:gap-14">
             {/* Left side - Images */}
             <div 
               className={`space-y-4 transition-all duration-700 delay-100 ${
@@ -402,14 +402,14 @@ export default function CourseDetailPage() {
 
               {/* Thumbnails */}
               {images.length > 1 && (
-                <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-1 px-1">
                   {images.map((img, idx) => (
                     <button
                       key={idx}
                       onClick={() => { setCurrentImageIndex(idx); setIsAutoPlaying(false) }}
-                      className={`relative flex-shrink-0 w-20 h-14 sm:w-24 sm:h-16 rounded-xl overflow-hidden transition-all duration-300 ${
+                      className={`relative flex-shrink-0 w-14 h-10 xs:w-16 xs:h-11 sm:w-24 sm:h-16 rounded-lg sm:rounded-xl overflow-hidden transition-all duration-300 ${
                         currentImageIndex === idx 
-                          ? 'ring-2 ring-offset-2 scale-105 shadow-lg' 
+                          ? 'ring-2 ring-offset-1 sm:ring-offset-2 scale-105 shadow-lg' 
                           : 'opacity-60 hover:opacity-100 hover:scale-105'
                       }`}
                       style={{ 
@@ -420,6 +420,7 @@ export default function CourseDetailPage() {
                         src={img}
                         alt={`${course.title} - ${idx + 1}`}
                         fill
+                        sizes="(max-width: 640px) 64px, 96px"
                         className="object-cover"
                       />
                     </button>
@@ -459,7 +460,7 @@ export default function CourseDetailPage() {
 
               {/* Title */}
               <h1 
-                className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1E1E42] leading-tight"
+                className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1E1E42] leading-tight"
                 style={{ fontFamily: 'var(--font-poppins)' }}
               >
                 {course.title}
@@ -467,78 +468,78 @@ export default function CourseDetailPage() {
 
               {/* Short description */}
               <p 
-                className="text-lg text-[#64748B] leading-relaxed"
+                className="text-base sm:text-lg text-[#64748B] leading-relaxed"
                 style={{ fontFamily: 'var(--font-quicksand)' }}
               >
                 {course.descriptionShort}
               </p>
 
               {/* Price */}
-              <div className="flex items-center gap-4 flex-wrap">
+              <div className="flex items-center gap-2 xs:gap-3 sm:gap-4 flex-wrap">
                 {course.discountPrice ? (
                   <>
                     <div 
-                      className="px-5 py-2.5 rounded-2xl inline-flex items-baseline gap-1 shadow-lg"
+                      className="px-3 xs:px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl inline-flex items-baseline gap-1 shadow-lg"
                       style={{ 
                         backgroundColor: accentColor,
                         boxShadow: `0 8px 24px ${accentColor}40`
                       }}
                     >
                       <span 
-                        className="text-3xl font-black text-white"
+                        className="text-xl xs:text-2xl sm:text-3xl font-black text-white"
                         style={{ fontFamily: 'var(--font-poppins)' }}
                       >
                         {formatPrice(course.discountPrice)}
                       </span>
-                      <span className="text-base font-semibold text-white/80">MDL</span>
+                      <span className="text-xs xs:text-sm sm:text-base font-semibold text-white/80">MDL</span>
                     </div>
-                    <div className="px-4 py-2 bg-[#F8FAFC] rounded-xl inline-flex items-baseline gap-1 border border-[#E2E8F0]">
+                    <div className="px-2.5 xs:px-3 sm:px-4 py-1.5 sm:py-2 bg-[#F8FAFC] rounded-lg sm:rounded-xl inline-flex items-baseline gap-1 border border-[#E2E8F0]">
                       <span 
-                        className="text-xl font-medium text-[#94A3B8] line-through"
+                        className="text-base xs:text-lg sm:text-xl font-medium text-[#94A3B8] line-through"
                         style={{ fontFamily: 'var(--font-poppins)' }}
                       >
                         {formatPrice(course.price)}
                       </span>
-                      <span className="text-sm text-[#94A3B8]">MDL</span>
+                      <span className="text-xs sm:text-sm text-[#94A3B8]">MDL</span>
                     </div>
                   </>
                 ) : course.price ? (
                   <div 
-                    className="px-5 py-2.5 rounded-2xl inline-flex items-baseline gap-1 shadow-lg"
+                    className="px-3 xs:px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl inline-flex items-baseline gap-1 shadow-lg"
                     style={{ 
                       backgroundColor: accentColor,
                       boxShadow: `0 8px 24px ${accentColor}40`
                     }}
                   >
                     <span 
-                      className="text-3xl font-black text-white"
+                      className="text-xl xs:text-2xl sm:text-3xl font-black text-white"
                       style={{ fontFamily: 'var(--font-poppins)' }}
                     >
                       {formatPrice(course.price)}
                     </span>
-                    <span className="text-base font-semibold text-white/80">MDL</span>
+                    <span className="text-xs xs:text-sm sm:text-base font-semibold text-white/80">MDL</span>
                   </div>
                 ) : null}
               </div>
 
               {/* Meta info cards */}
-              <div className="grid grid-cols-3 gap-3 sm:gap-4">
+              <div className="grid grid-cols-2 xs:grid-cols-3 gap-2 xs:gap-3 sm:gap-4">
                 {ageText && (
-                  <div className="group p-4 bg-white rounded-2xl border border-[#E2E8F0] hover:border-transparent hover:shadow-lg transition-all duration-300 text-center">
+                  <div className="group p-2.5 xs:p-3 sm:p-4 bg-white rounded-xl sm:rounded-2xl border border-[#E2E8F0] hover:border-transparent hover:shadow-lg transition-all duration-300 text-center">
                     <div 
-                      className="w-10 h-10 mx-auto mb-2 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                      className="w-8 h-8 xs:w-9 xs:h-9 sm:w-10 sm:h-10 mx-auto mb-1.5 sm:mb-2 rounded-lg sm:rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
                       style={{ backgroundColor: `${accentColor}12` }}
                     >
-                      <Icons.Users className="w-5 h-5" style={{ color: accentColor }} />
+                      <Icons.Users className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: accentColor }} />
                     </div>
                     <p 
-                      className="text-xs text-[#94A3B8] mb-0.5"
+                      className="text-[10px] xs:text-xs text-[#94A3B8] mb-0.5"
                       style={{ fontFamily: 'var(--font-quicksand)' }}
                     >
                       Vârstă
                     </p>
                     <p 
-                      className="text-sm font-bold text-[#1E1E42]"
+                      className="text-xs xs:text-sm font-bold text-[#1E1E42]"
                       style={{ fontFamily: 'var(--font-poppins)' }}
                     >
                       {ageText}
@@ -546,21 +547,21 @@ export default function CourseDetailPage() {
                   </div>
                 )}
                 {course.duration && (
-                  <div className="group p-4 bg-white rounded-2xl border border-[#E2E8F0] hover:border-transparent hover:shadow-lg transition-all duration-300 text-center">
+                  <div className="group p-2.5 xs:p-3 sm:p-4 bg-white rounded-xl sm:rounded-2xl border border-[#E2E8F0] hover:border-transparent hover:shadow-lg transition-all duration-300 text-center">
                     <div 
-                      className="w-10 h-10 mx-auto mb-2 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                      className="w-8 h-8 xs:w-9 xs:h-9 sm:w-10 sm:h-10 mx-auto mb-1.5 sm:mb-2 rounded-lg sm:rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
                       style={{ backgroundColor: `${accentColor}12` }}
                     >
-                      <Icons.Clock className="w-5 h-5" style={{ color: accentColor }} />
+                      <Icons.Clock className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: accentColor }} />
                     </div>
                     <p 
-                      className="text-xs text-[#94A3B8] mb-0.5"
+                      className="text-[10px] xs:text-xs text-[#94A3B8] mb-0.5"
                       style={{ fontFamily: 'var(--font-quicksand)' }}
                     >
                       Durată
                     </p>
                     <p 
-                      className="text-sm font-bold text-[#1E1E42]"
+                      className="text-xs xs:text-sm font-bold text-[#1E1E42]"
                       style={{ fontFamily: 'var(--font-poppins)' }}
                     >
                       {course.duration}
@@ -568,21 +569,21 @@ export default function CourseDetailPage() {
                   </div>
                 )}
                 {course.lessonsCount && (
-                  <div className="group p-4 bg-white rounded-2xl border border-[#E2E8F0] hover:border-transparent hover:shadow-lg transition-all duration-300 text-center">
+                  <div className="group p-2.5 xs:p-3 sm:p-4 bg-white rounded-xl sm:rounded-2xl border border-[#E2E8F0] hover:border-transparent hover:shadow-lg transition-all duration-300 text-center col-span-2 xs:col-span-1">
                     <div 
-                      className="w-10 h-10 mx-auto mb-2 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                      className="w-8 h-8 xs:w-9 xs:h-9 sm:w-10 sm:h-10 mx-auto mb-1.5 sm:mb-2 rounded-lg sm:rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
                       style={{ backgroundColor: `${accentColor}12` }}
                     >
-                      <Icons.BookOpen className="w-5 h-5" style={{ color: accentColor }} />
+                      <Icons.BookOpen className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: accentColor }} />
                     </div>
                     <p 
-                      className="text-xs text-[#94A3B8] mb-0.5"
+                      className="text-[10px] xs:text-xs text-[#94A3B8] mb-0.5"
                       style={{ fontFamily: 'var(--font-quicksand)' }}
                     >
                       Lecții
                     </p>
                     <p 
-                      className="text-sm font-bold text-[#1E1E42]"
+                      className="text-xs xs:text-sm font-bold text-[#1E1E42]"
                       style={{ fontFamily: 'var(--font-poppins)' }}
                     >
                       {course.lessonsCount}
@@ -594,16 +595,16 @@ export default function CourseDetailPage() {
               {/* CTA Button */}
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="relative w-full py-4 rounded-2xl font-bold text-white overflow-hidden transition-all duration-300 hover:shadow-xl active:scale-[0.98] group"
+                className="relative w-full py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-white overflow-hidden transition-all duration-300 hover:shadow-xl active:scale-[0.98] group text-sm sm:text-base"
                 style={{ 
                   backgroundColor: '#1E1E42',
                   fontFamily: 'var(--font-poppins)'
                 }}
               >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  <Icons.Sparkles className="w-5 h-5" />
+                <span className="relative z-10 flex items-center justify-center gap-1.5 sm:gap-2">
+                  <Icons.Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
                   Înscrie-te acum
-                  <Icons.ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
+                  <Icons.ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-1" />
                 </span>
                 <div 
                   className="absolute inset-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300"
@@ -620,21 +621,21 @@ export default function CourseDetailPage() {
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
               }`}
             >
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
                 <div 
-                  className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center"
                   style={{ backgroundColor: `${accentColor}12` }}
                 >
-                  <Icons.Academic className="w-5 h-5" style={{ color: accentColor }} />
+                  <Icons.Academic className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: accentColor }} />
                 </div>
                 <h2 
-                  className="text-2xl sm:text-3xl font-bold text-[#1E1E42]"
+                  className="text-xl xs:text-2xl sm:text-3xl font-bold text-[#1E1E42]"
                   style={{ fontFamily: 'var(--font-poppins)' }}
                 >
                   Despre acest curs
                 </h2>
               </div>
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E2E8F0] shadow-[0_4px_20px_rgba(30,30,66,0.06)]">
+              <div className="bg-white rounded-2xl sm:rounded-3xl p-4 xs:p-5 sm:p-6 lg:p-8 border border-[#E2E8F0] shadow-[0_4px_20px_rgba(30,30,66,0.06)]">
                 <p 
                   className="whitespace-pre-wrap leading-relaxed text-[#64748B]"
                   style={{ fontFamily: 'var(--font-quicksand)' }}
@@ -651,25 +652,25 @@ export default function CourseDetailPage() {
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            <div className="text-center mb-10">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#2BA84C]/10 border border-[#2BA84C]/20 rounded-full mb-4">
-                <Icons.Check className="w-4 h-4 text-[#2BA84C]" />
+            <div className="text-center mb-6 sm:mb-10">
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-[#2BA84C]/10 border border-[#2BA84C]/20 rounded-full mb-3 sm:mb-4">
+                <Icons.Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2BA84C]" />
                 <span 
-                  className="text-[#2BA84C] text-sm font-semibold"
+                  className="text-[#2BA84C] text-xs sm:text-sm font-semibold"
                   style={{ fontFamily: 'var(--font-quicksand)' }}
                 >
                   De ce să alegi acest curs
                 </span>
               </div>
               <h2 
-                className="text-2xl sm:text-3xl font-bold text-[#1E1E42]"
+                className="text-xl xs:text-2xl sm:text-3xl font-bold text-[#1E1E42]"
                 style={{ fontFamily: 'var(--font-poppins)' }}
               >
                 Beneficii pentru copilul tău
               </h2>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 xs:gap-4 sm:gap-6">
               {[
                 { title: 'Învățare practică', description: 'Activități interactive care fac învățarea captivantă și memorabilă', color: '#4CD0DC', icon: 'BookOpen' },
                 { title: 'Profesori dedicați', description: 'Echipă de profesioniști pasionați de educație', color: '#FC0168', icon: 'Users' },
@@ -682,20 +683,20 @@ export default function CourseDetailPage() {
                 return (
                 <div 
                   key={idx}
-                  className="group p-6 rounded-2xl border-2 hover:border-transparent hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className="group p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 hover:border-transparent hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                   style={{ 
                     backgroundColor: `${benefit.color}08`,
                     borderColor: `${benefit.color}30`
                   }}
                 >
                   <div 
-                    className="w-12 h-12 mb-4 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
+                    className="w-10 h-10 sm:w-12 sm:h-12 mb-3 sm:mb-4 rounded-xl sm:rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
                     style={{ backgroundColor: benefit.color }}
                   >
-                    <IconComponent className="w-6 h-6 text-white" />
+                    <IconComponent className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                   <h3 
-                    className="font-bold mb-2 text-lg"
+                    className="font-bold mb-1.5 sm:mb-2 text-base sm:text-lg"
                     style={{ fontFamily: 'var(--font-poppins)', color: benefit.color }}
                   >
                     {benefit.title}
@@ -717,7 +718,7 @@ export default function CourseDetailPage() {
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            <div className="bg-white rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden border-2 border-[#E2E8F0] shadow-[0_20px_60px_rgba(30,30,66,0.1)]">
+            <div className="bg-white rounded-2xl sm:rounded-3xl p-5 xs:p-6 sm:p-8 lg:p-12 text-center relative overflow-hidden border-2 border-[#E2E8F0] shadow-[0_20px_60px_rgba(30,30,66,0.1)]">
               {/* Decorative elements */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-[#4CD0DC]/10 rounded-full blur-3xl" />
               <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#FCD700]/10 rounded-full blur-3xl" />
@@ -725,29 +726,29 @@ export default function CourseDetailPage() {
               
               <div className="relative z-10">
                 <h3 
-                  className="text-2xl sm:text-3xl font-bold text-[#1E1E42] mb-4"
+                  className="text-xl xs:text-2xl sm:text-3xl font-bold text-[#1E1E42] mb-3 sm:mb-4"
                   style={{ fontFamily: 'var(--font-poppins)' }}
                 >
                   Pregătit să începi?
                 </h3>
                 <p 
-                  className="text-[#64748B] mb-8 max-w-lg mx-auto"
+                  className="text-sm sm:text-base text-[#64748B] mb-5 sm:mb-8 max-w-lg mx-auto"
                   style={{ fontFamily: 'var(--font-quicksand)' }}
                 >
                   Înscrie-te acum și oferă copilului tău o experiență educațională de neuitat!
                 </p>
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-[#1E1E42] transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-[0.98]"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-5 xs:px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl font-bold text-[#1E1E42] transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-[0.98] text-sm sm:text-base"
                   style={{ 
                     backgroundColor: accentColor,
                     fontFamily: 'var(--font-poppins)',
                     boxShadow: `0 8px 24px ${accentColor}40`
                   }}
                 >
-                  <Icons.Sparkles className="w-5 h-5" />
+                  <Icons.Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
                   Înscrie-te acum
-                  <Icons.ArrowRight className="w-5 h-5" />
+                  <Icons.ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
               </div>
             </div>

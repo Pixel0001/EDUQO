@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 
 // Icon Components
 const Icons = {
@@ -114,64 +114,36 @@ const defaultReviews = [
   },
 ]
 
-export default function ReviewsSection() {
+export default function ReviewsSection({ initialReviews = [] }) {
   const [isVisible, setIsVisible] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
-  const [reviews, setReviews] = useState([])
-  const [loading, setLoading] = useState(true)
   const sectionRef = useRef(null)
 
-  // Încarcă recenziile din baza de date
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const res = await fetch('/api/public/reviews')
-        if (res.ok) {
-          const data = await res.json()
-          if (data && data.length > 0) {
-            // Adaugă culori și inițiale pentru fiecare recenzie
-            const reviewsWithColors = data.map((review, index) => ({
-              ...review,
-              color: avatarColors[index % avatarColors.length],
-              initials: getInitials(review.authorName),
-              // Compatibilitate cu structura componente
-              name: review.authorName,
-              role: review.roleLabel || 'Părinte',
-              text: review.message,
-              childInfo: review.childName ? (review.childName + (review.childAge ? `, ${review.childAge}` : '')) : '',
-            }))
-            setReviews(reviewsWithColors)
-          } else {
-            // Folosește recenziile implicite dacă nu există în baza de date
-            setReviews(defaultReviews.map((review, index) => ({
-              ...review,
-              color: avatarColors[index % avatarColors.length],
-              initials: getInitials(review.parentName),
-              name: review.parentName,
-              role: review.relation,
-              text: review.content,
-              childInfo: review.childName + (review.childAge ? `, ${review.childAge}` : ''),
-            })))
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching reviews:', error)
-        // Folosește recenziile implicite în caz de eroare
-        setReviews(defaultReviews.map((review, index) => ({
-          ...review,
-          color: avatarColors[index % avatarColors.length],
-          initials: getInitials(review.parentName),
-          name: review.parentName,
-          role: review.relation,
-          text: review.content,
-          childInfo: review.childName + (review.childAge ? `, ${review.childAge}` : ''),
-        })))
-      } finally {
-        setLoading(false)
-      }
+  // Procesăm recenziile primite de la server (ISR)
+  const reviews = useMemo(() => {
+    // Dacă avem recenzii din baza de date
+    if (initialReviews && initialReviews.length > 0) {
+      return initialReviews.map((review, index) => ({
+        ...review,
+        color: avatarColors[index % avatarColors.length],
+        initials: getInitials(review.authorName),
+        name: review.authorName,
+        role: review.roleLabel || 'Părinte',
+        text: review.message,
+        childInfo: review.childName ? (review.childName + (review.childAge ? `, ${review.childAge}` : '')) : '',
+      }))
     }
-    fetchReviews()
-  }, [])
+    // Folosește recenziile implicite dacă nu există în baza de date
+    return defaultReviews.map((review, index) => ({
+      ...review,
+      color: avatarColors[index % avatarColors.length],
+      initials: getInitials(review.parentName),
+      name: review.parentName,
+      role: review.relation,
+      text: review.content,
+      childInfo: review.childName + (review.childAge ? `, ${review.childAge}` : ''),
+    }))
+  }, [initialReviews])
 
   useEffect(() => {
     const observer = new IntersectionObserver(

@@ -33,7 +33,7 @@
   --color-foreground: var(--foreground);
   --font-heading: var(--font-poppins);
   --font-body: var(--font-quicksand);
-  --breakpoint-xs: 360px;
+  --breakpoint-xs: 375px;
 }
 
 /* Base Styles */

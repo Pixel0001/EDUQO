@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState, useRef } from 'react'
+import { useMemo, useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -96,14 +96,14 @@ const Icons = {
   ),
 }
 
-export default function CoursesSection() {
+export default function CoursesSection({ initialCourses = [] }) {
   const [isVisible, setIsVisible] = useState(false)
   const [activeCategory, setActiveCategory] = useState('toate')
   const [hoveredCourse, setHoveredCourse] = useState(null)
-  const [courses, setCourses] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
   const sectionRef = useRef(null)
+
+  // Folosim datele pre-loaded din server (ISR)
+  const courses = initialCourses
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -120,40 +120,6 @@ export default function CoursesSection() {
     }
 
     return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
-    let isMounted = true
-
-    const fetchCourses = async () => {
-      try {
-        setLoading(true)
-        setError('')
-        const res = await fetch('/api/public/courses')
-        if (!res.ok) {
-          throw new Error('Failed to fetch courses')
-        }
-        const data = await res.json()
-        if (isMounted) {
-          setCourses(Array.isArray(data) ? data : [])
-        }
-      } catch (err) {
-        if (isMounted) {
-          setError('Nu am putut încărca cursurile')
-          setCourses([])
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false)
-        }
-      }
-    }
-
-    fetchCourses()
-
-    return () => {
-      isMounted = false
-    }
   }, [])
 
   const categoryMeta = {
@@ -342,47 +308,13 @@ export default function CoursesSection() {
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          {loading && (
-            Array.from({ length: 6 }).map((_, index) => (
-              <div
-                key={`skeleton-${index}`}
-                className="relative bg-white rounded-3xl shadow-[0_4px_20px_rgba(30,30,66,0.06)] overflow-hidden animate-pulse"
-              >
-                {/* Image skeleton */}
-                <div className="h-48 bg-[#E2E8F0]" />
-                <div className="p-5 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="w-20 h-4 rounded bg-[#E2E8F0]" />
-                    <div className="w-16 h-4 rounded bg-[#E2E8F0]" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="h-5 w-3/4 bg-[#E2E8F0] rounded" />
-                    <div className="h-3 w-full bg-[#E2E8F0] rounded" />
-                    <div className="h-3 w-2/3 bg-[#E2E8F0] rounded" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="h-3 w-5/6 bg-[#E2E8F0] rounded" />
-                    <div className="h-3 w-2/3 bg-[#E2E8F0] rounded" />
-                  </div>
-                  <div className="h-10 w-full bg-[#E2E8F0] rounded-2xl" />
-                </div>
-              </div>
-            ))
-          )}
-
-          {!loading && error && (
-            <div className="sm:col-span-2 lg:col-span-3 bg-white rounded-3xl border border-[#E2E8F0] p-8 text-center text-[#64748B]">
-              {error}
-            </div>
-          )}
-
-          {!loading && !error && filteredCourses.length === 0 && (
+          {filteredCourses.length === 0 && (
             <div className="sm:col-span-2 lg:col-span-3 bg-white rounded-3xl border border-[#E2E8F0] p-8 text-center text-[#64748B]">
               Nu există cursuri disponibile momentan.
             </div>
           )}
 
-          {!loading && !error && filteredCourses.map((course, index) => {
+          {filteredCourses.map((course, index) => {
             const IconComponent = course.icon
             const isHovered = hoveredCourse === course.id
             const hasDiscount = course.discountPrice && course.price && course.discountPrice < course.price
@@ -403,6 +335,8 @@ export default function CoursesSection() {
                       src={course.image}
                       alt={course.title}
                       fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      loading="lazy"
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   ) : (

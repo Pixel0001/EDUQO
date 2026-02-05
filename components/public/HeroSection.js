@@ -1,9 +1,15 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, memo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import ConfettiDecoration from './ConfettiDecoration'
+
+// Lazy load ConfettiDecoration - nu e critic pentru LCP
+import dynamic from 'next/dynamic'
+const ConfettiDecoration = dynamic(() => import('./ConfettiDecoration'), { 
+  ssr: false,
+  loading: () => null 
+})
 
 // Icon Components - Clean SVG icons
 const Icons = {
@@ -76,17 +82,16 @@ const Icons = {
 }
 
 export default function HeroSection() {
-  const [isVisible, setIsVisible] = useState(false)
+  // Inițializăm cu true pentru a evita animația de fade-in care încetinește LCP
+  const [isVisible, setIsVisible] = useState(true)
   const [currentStatIndex, setCurrentStatIndex] = useState(0)
-  const [countedStats, setCountedStats] = useState([0, 0, 0, 0])
-  const [hasAnimated, setHasAnimated] = useState(false)
+  // Inițializăm cu valori finale pentru prima randare (LCP mai rapid)
+  const [countedStats, setCountedStats] = useState([500, 15, 20, 98])
+  const [hasAnimated, setHasAnimated] = useState(true)
   const sectionRef = useRef(null)
   const statsRef = useRef(null)
 
-  useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 100)
-    return () => clearTimeout(timer)
-  }, [])
+  // Eliminăm timer-ul pentru isVisible - componenta e vizibilă imediat
 
   // Animate stats counter
   useEffect(() => {

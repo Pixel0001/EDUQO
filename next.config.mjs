@@ -29,12 +29,19 @@ const nextConfig = {
     ],
     // Optimize images for production
     formats: ['image/avif', 'image/webp'],
-    minimumCacheTTL: 60,
+    minimumCacheTTL: 31536000, // Cache 1 year (was 60 seconds)
+    deviceSizes: [640, 750, 828, 1080, 1200], // Optimized device sizes
+    imageSizes: [16, 32, 48, 64, 96, 128, 256], // Optimized image sizes
   },
 
   // Production optimizations
   poweredByHeader: false, // Remove X-Powered-By header for security
   compress: true, // Enable gzip compression
+  
+  // Experimental optimizations
+  experimental: {
+    optimizePackageImports: ['react-hot-toast', 'lucide-react'], // Tree-shake imports
+  },
   
   // Strict mode for better debugging
   reactStrictMode: true,

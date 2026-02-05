@@ -7,15 +7,19 @@ import ThemeProvider from "@/components/providers/ThemeProvider";
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["500", "600", "700"], // Redus de la 5 la 3 weights (400, 800 eliminate)
   display: "swap",
+  preload: true,
+  fallback: ['system-ui', 'arial'],
 });
 
 const quicksand = Quicksand({
   variable: "--font-quicksand",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["500", "600"], // Redus de la 4 la 2 weights (400, 700 eliminate)
   display: "swap",
+  preload: true,
+  fallback: ['system-ui', 'arial'],
 });
 
 export const metadata = {
@@ -116,6 +120,11 @@ export default function RootLayout({ children }) {
     <html lang="ro" suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {/* Preload imagini critice pentru LCP */}
+        <link rel="preload" href="/logo eduquo.png" as="image" type="image/png" />
+        {/* DNS prefetch pentru resurse externe */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body
         className={`${poppins.variable} ${quicksand.variable} antialiased`}

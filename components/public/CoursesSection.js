@@ -97,7 +97,8 @@ const Icons = {
 }
 
 export default function CoursesSection({ initialCourses = [] }) {
-  const [isVisible, setIsVisible] = useState(false)
+  // Inițializăm cu true pentru a afișa conținutul imediat
+  const [isVisible, setIsVisible] = useState(true)
   const [activeCategory, setActiveCategory] = useState('toate')
   const [hoveredCourse, setHoveredCourse] = useState(null)
   const sectionRef = useRef(null)
@@ -105,22 +106,7 @@ export default function CoursesSection({ initialCourses = [] }) {
   // Folosim datele pre-loaded din server (ISR)
   const courses = initialCourses
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
-      },
-      { threshold: 0.1 }
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [])
+  // Eliminăm IntersectionObserver pentru prima încărcare - conținutul e vizibil imediat
 
   const categoryMeta = {
     limba: { name: 'Limbă', icon: Icons.Language, color: '#4CD0DC' },

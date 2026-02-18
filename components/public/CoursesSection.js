@@ -307,15 +307,15 @@ export default function CoursesSection({ initialCourses = [] }) {
             return (
               <div
                 key={course.id}
-                className="group relative bg-white rounded-3xl shadow-[0_4px_20px_rgba(30,30,66,0.06)] hover:shadow-[0_20px_50px_rgba(30,30,66,0.12)] transition-all duration-500 overflow-hidden"
+                className="group relative bg-white rounded-3xl shadow-[0_4px_20px_rgba(30,30,66,0.06)] hover:shadow-[0_20px_50px_rgba(30,30,66,0.12)] transition-all duration-500 overflow-hidden flex flex-col h-full"
                 onMouseEnter={() => setHoveredCourse(course.id)}
                 onMouseLeave={() => setHoveredCourse(null)}
                 style={{
                   transitionDelay: `${index * 50}ms`
                 }}
               >
-                {/* Course Image */}
-                <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#F8FAFC] to-white">
+                {/* Course Image - Clickable */}
+                <Link href={course.slug ? `/curs/${course.slug}` : '/inscriere'} className="block relative h-48 overflow-hidden bg-gradient-to-br from-[#F8FAFC] to-white">
                   {course.image ? (
                     <Image
                       src={course.image}
@@ -380,9 +380,9 @@ export default function CoursesSection({ initialCourses = [] }) {
                       </span>
                     </div>
                   )}
-                </div>
+                </Link>
 
-                <div className="relative p-5">
+                <div className="relative p-5 flex flex-col flex-1">
                   {/* Header with age and duration */}
                   <div className="flex items-center justify-between mb-3">
                     <span 
@@ -416,7 +416,7 @@ export default function CoursesSection({ initialCourses = [] }) {
                   </p>
 
                   {/* Features */}
-                  <div className="space-y-2 mb-4">
+                  <div className="space-y-2 mb-4 flex-1">
                     {course.features.map((feature, idx) => (
                       <div 
                         key={idx} 
@@ -442,8 +442,8 @@ export default function CoursesSection({ initialCourses = [] }) {
                     ))}
                   </div>
 
-                  {/* CTA Buttons */}
-                  <div className="flex gap-2">
+                  {/* CTA Buttons - Always at bottom */}
+                  <div className="flex gap-2 mt-auto">
                     <Link
                       href={course.slug ? `/curs/${course.slug}` : '/inscriere'}
                       className="relative flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl font-semibold overflow-hidden transition-all duration-300 group/btn border-2"

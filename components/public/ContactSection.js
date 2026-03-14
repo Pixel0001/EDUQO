@@ -297,7 +297,7 @@ export default function ContactSection() {
               <Wrapper
                 key={index}
                 href={card.href || undefined}
-                className={`group relative p-3 sm:p-4 md:p-5 bg-white rounded-2xl sm:rounded-3xl border-2 border-[#E2E8F0] ${card.hoverBorder} shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1`}
+                className={`group relative p-3 sm:p-4 md:p-5 bg-white rounded-2xl sm:rounded-3xl border-2 border-[#E2E8F0] ${card.hoverBorder} shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden min-w-0`}
                 style={{ transitionDelay: `${index * 75}ms` }}
               >
                 <div className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 ${card.bgColor} rounded-xl sm:rounded-2xl flex items-center justify-center mb-2 sm:mb-3 md:mb-4 group-hover:scale-110 transition-transform duration-300`}>
@@ -310,8 +310,8 @@ export default function ContactSection() {
                   {card.title}
                 </p>
                 <p 
-                  className="text-[10px] sm:text-sm md:text-base lg:text-lg font-bold text-[#1E1E42] mb-0.5 sm:mb-1 break-all sm:break-normal"
-                  style={{ fontFamily: 'var(--font-poppins)' }}
+                  className="text-[10px] sm:text-sm md:text-base lg:text-lg font-bold text-[#1E1E42] mb-0.5 sm:mb-1"
+                  style={{ fontFamily: 'var(--font-poppins)', overflowWrap: 'anywhere', wordBreak: 'break-all' }}
                 >
                   {card.value}
                 </p>

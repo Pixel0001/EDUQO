@@ -103,6 +103,13 @@ export const metadata = {
   category: "education",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#4CD0DC",
+};
+
 // Script to apply theme before page renders to prevent flash
 const themeScript = `
   (function() {
@@ -117,14 +124,11 @@ const themeScript = `
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ro" suppressHydrationWarning data-scroll-behavior="smooth">
+    <html lang="ro" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         {/* Preload imagini critice pentru LCP */}
-        <link rel="preload" href="/logo eduquo.png" as="image" type="image/png" />
-        {/* DNS prefetch pentru resurse externe */}
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preload" href="/logo%20eduquo.png" as="image" type="image/png" fetchPriority="high" />
       </head>
       <body
         className={`${poppins.variable} ${quicksand.variable} antialiased`}

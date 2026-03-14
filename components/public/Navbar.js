@@ -12,7 +12,7 @@ export default function Navbar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
     }
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -39,10 +39,10 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-1.5 sm:gap-2 md:gap-3 group">
             <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 transition-transform duration-300 group-hover:scale-105 group-hover:rotate-3">
               <Image
-                src="/logo eduquo.png"
+                src="/logo%20eduquo.png"
                 alt="EDUQO Logo"
                 fill
-                sizes="(max-width: 640px) 40px, (max-width: 768px) 48px, 56px"
+                sizes="48px"
                 className="object-contain"
                 priority
               />

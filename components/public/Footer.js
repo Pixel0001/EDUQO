@@ -70,9 +70,10 @@ export default function Footer() {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true)
+          observer.disconnect()
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.05, rootMargin: '100px' }
     )
 
     if (footerRef.current) {
@@ -193,7 +194,7 @@ export default function Footer() {
             <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 group">
               <div className="relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl sm:rounded-2xl overflow-hidden shadow-lg shadow-[#4CD0DC]/30 group-hover:scale-110 transition-transform duration-300">
                 <Image
-                  src="/logo eduquo.png"
+                  src="/logo%20eduquo.png"
                   alt="EDUQO Logo"
                   fill
                   sizes="(max-width: 640px) 40px, (max-width: 768px) 48px, 56px"

@@ -150,9 +150,10 @@ export default function ReviewsSection({ initialReviews = [] }) {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true)
+          observer.disconnect()
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.05, rootMargin: '100px' }
     )
 
     if (sectionRef.current) {

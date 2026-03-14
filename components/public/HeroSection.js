@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef, memo } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -82,67 +82,19 @@ const Icons = {
 }
 
 export default function HeroSection() {
-  // Inițializăm cu true pentru a evita animația de fade-in care încetinește LCP
-  const [isVisible, setIsVisible] = useState(true)
+  // Content vizibil imediat - fără animație de fade-in (LCP mai rapid)
   const [currentStatIndex, setCurrentStatIndex] = useState(0)
-  // Inițializăm cu valori finale pentru prima randare (LCP mai rapid)
-  const [countedStats, setCountedStats] = useState([500, 15, 20, 98])
-  const [hasAnimated, setHasAnimated] = useState(true)
-  const sectionRef = useRef(null)
+  // Valori finale afișate imediat (fără counter animation pe prima încărcare)
+  const countedStats = [500, 15, 20, 98]
   const statsRef = useRef(null)
 
-  // Eliminăm timer-ul pentru isVisible - componenta e vizibilă imediat
-
-  // Animate stats counter
+  // Animate stats highlight indicator
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentStatIndex((prev) => (prev + 1) % 4)
     }, 3000)
     return () => clearInterval(interval)
   }, [])
-
-  // Animated counter effect - synchronized
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated) {
-          setHasAnimated(true)
-          const duration = 2500 // 2.5 seconds
-          const startTime = performance.now()
-          const targetValues = [500, 15, 20, 98]
-
-          const animate = (currentTime) => {
-            const elapsed = currentTime - startTime
-            const progress = Math.min(elapsed / duration, 1)
-            
-            // Linear progress with slight ease at the very end
-            const easeProgress = progress < 0.9 
-              ? progress / 0.9 * 0.95 // Linear for first 90%
-              : 0.95 + (progress - 0.9) / 0.1 * 0.05 // Slow finish for last 10%
-            
-            setCountedStats(targetValues.map(target => 
-              Math.round(target * Math.min(easeProgress, 1))
-            ))
-
-            if (progress < 1) {
-              requestAnimationFrame(animate)
-            } else {
-              // Ensure final values are exact
-              setCountedStats(targetValues)
-            }
-          }
-          requestAnimationFrame(animate)
-        }
-      },
-      { threshold: 0.3 }
-    )
-
-    if (statsRef.current) {
-      observer.observe(statsRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [hasAnimated])
 
   const stats = [
     { 
@@ -191,7 +143,6 @@ export default function HeroSection() {
 
   return (
     <section
-      ref={sectionRef}
       id="hero"
       className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-white"
     >
@@ -208,11 +159,8 @@ export default function HeroSection() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
         <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
           {/* Left Content */}
-          <div
-            className={`text-center lg:text-left transition-all duration-700 ease-out ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-          >
+          <div className="text-center lg:text-left">
+
             {/* Main Heading */}
             <h1 
               className="text-[1.75rem] xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-[3.5rem] font-bold leading-[1.15] sm:leading-[1.1] mb-4 sm:mb-6 text-[#1E1E42]"
@@ -292,11 +240,8 @@ export default function HeroSection() {
           </div>
 
           {/* Right Content - Modern Visual */}
-          <div
-            className={`relative transition-all duration-700 delay-200 ease-out ${
-              isVisible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'
-            }`}
-          >
+          <div className="relative">
+
             {/* Main Visual Container */}
             <div className="relative">
               {/* Background Gradient Circle */}
@@ -319,7 +264,7 @@ export default function HeroSection() {
                   <div className="relative w-32 xs:w-36 sm:w-44 md:w-52 h-32 xs:h-36 sm:h-44 md:h-52 bg-white rounded-[1.5rem] sm:rounded-[2.5rem] shadow-[0_12px_40px_rgba(30,30,66,0.12)] sm:shadow-[0_20px_60px_rgba(30,30,66,0.15)] flex items-center justify-center overflow-hidden border border-white/50">
                     <div className="absolute inset-0 bg-gradient-to-br from-[#4CD0DC]/5 to-[#FCD700]/5" />
                     <Image
-                      src="/logo eduquo.png"
+                      src="/logo%20eduquo.png"
                       alt="EDUQO"
                       width={140}
                       height={140}
@@ -420,9 +365,7 @@ export default function HeroSection() {
         {/* Stats Section */}
         <div
           ref={statsRef}
-          className={`mt-10 sm:mt-16 md:mt-20 transition-all duration-700 delay-400 ease-out ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
+          className="mt-10 sm:mt-16 md:mt-20"
         >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 xs:gap-3 sm:gap-4 md:gap-6">
             {stats.map((stat, index) => {

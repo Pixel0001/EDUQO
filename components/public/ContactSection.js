@@ -94,9 +94,10 @@ export default function ContactSection() {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true)
+          observer.disconnect()
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.05, rootMargin: '100px' }
     )
 
     if (sectionRef.current) {
@@ -309,7 +310,7 @@ export default function ContactSection() {
                   {card.title}
                 </p>
                 <p 
-                  className="text-xs sm:text-sm md:text-base lg:text-lg font-bold text-[#1E1E42] mb-0.5 sm:mb-1 break-all sm:break-normal"
+                  className="text-[10px] sm:text-sm md:text-base lg:text-lg font-bold text-[#1E1E42] mb-0.5 sm:mb-1 break-all sm:break-normal"
                   style={{ fontFamily: 'var(--font-poppins)' }}
                 >
                   {card.value}

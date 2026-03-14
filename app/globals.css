@@ -39,6 +39,7 @@
 /* Base Styles */
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -46,6 +47,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-quicksand), 'Quicksand', -apple-system, BlinkMacSystemFont, sans-serif;
   line-height: 1.6;
+  text-rendering: optimizeSpeed;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -132,7 +134,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-lg);
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: var(--shadow-md);
 }
 
@@ -157,7 +159,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-lg);
   border: 2px solid var(--navy);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .btn-secondary:hover {
@@ -170,7 +172,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--card-bg);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .card:hover {
@@ -223,4 +225,35 @@ h1, h2, h3, h4, h5, h6 {
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* GPU-accelerated animations for smooth performance */
+.animate-float,
+.animate-bounce-gentle,
+.animate-bounce,
+.animate-pulse,
+.animate-spin {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Content-visibility optimization for below-fold sections */
+#despre,
+#contact,
+#recenzii,
+#faq {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

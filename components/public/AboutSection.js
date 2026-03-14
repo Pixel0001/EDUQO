@@ -88,9 +88,10 @@ export default function AboutSection() {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true)
+          observer.disconnect() // Stop observing once visible
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.05, rootMargin: '100px' }
     )
 
     if (sectionRef.current) {
@@ -257,7 +258,7 @@ export default function AboutSection() {
               <div className="flex justify-center mb-4 sm:mb-6 md:mb-8">
                 <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 p-2 sm:p-3 bg-gradient-to-br from-[#4CD0DC]/10 to-[#FCD700]/10 rounded-xl sm:rounded-2xl">
                   <Image
-                    src="/logo eduquo.png"
+                    src="/logo%20eduquo.png"
                     alt="EDUQO"
                     fill
                     sizes="(max-width: 640px) 64px, (max-width: 768px) 80px, 96px"

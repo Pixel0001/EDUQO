@@ -40,7 +40,11 @@ const nextConfig = {
   
   // Experimental optimizations
   experimental: {
-    optimizePackageImports: ['react-hot-toast', 'lucide-react'], // Tree-shake imports
+    optimizePackageImports: ['react-hot-toast', 'lucide-react', '@heroicons/react'], // Tree-shake imports
+    staleTimes: {
+      dynamic: 30,  // Cache dynamic pages for 30s on client
+      static: 180,  // Cache static pages for 3min on client
+    },
   },
   
   // Strict mode for better debugging
@@ -73,6 +77,16 @@ const nextConfig = {
       {
         // Cache static assets
         source: '/uploads/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // Cache images and fonts
+        source: '/:all*(svg|jpg|jpeg|png|webp|avif|ico|woff|woff2)',
         headers: [
           {
             key: 'Cache-Control',

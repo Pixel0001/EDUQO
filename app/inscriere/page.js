@@ -291,7 +291,7 @@ export default function InscrieriPage() {
             <Link href="/" className="flex items-center gap-3 group">
               <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-2xl overflow-hidden shadow-lg shadow-[#4CD0DC]/20 group-hover:scale-105 transition-transform duration-300">
                 <Image
-                  src="/logo eduquo.png"
+                  src="/logo%20eduquo.png"
                   alt="EDUQO Logo"
                   fill
                   className="object-contain"

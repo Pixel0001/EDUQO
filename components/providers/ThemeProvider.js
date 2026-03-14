@@ -13,10 +13,8 @@ export function useTheme() {
 
 export default function ThemeProvider({ children }) {
   const [isDarkMode, setIsDarkMode] = useState(true)
-  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
     // Check for saved theme preference or default to dark
     const savedTheme = localStorage.getItem('theme')
     if (savedTheme) {
@@ -33,11 +31,8 @@ export default function ThemeProvider({ children }) {
     document.documentElement.classList.toggle('light', newTheme === 'light')
   }
 
-  // Prevent flash of wrong theme
-  if (!mounted) {
-    return null
-  }
-
+  // Render children immediately - the inline script in <head> prevents theme flash
+  // No more returning null which was blocking ALL SSR content from displaying
   return (
     <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
       {children}
